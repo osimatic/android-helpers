@@ -19,7 +19,8 @@ public class AlertDialog {
 
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
-				android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity.getApplicationContext());
+				android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity);
+				//android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity.getApplicationContext());
 				builder.setTitle(activity.getResources().getString(R.string.error));
 				builder.setMessage(message);
 				builder.setCancelable(false);
