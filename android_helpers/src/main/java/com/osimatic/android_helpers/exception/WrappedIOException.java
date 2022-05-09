@@ -1,4 +1,4 @@
-package com.osimatic.android_helpers.Exception;
+package com.osimatic.android_helpers.exception;
 
 import java.io.IOException;
 

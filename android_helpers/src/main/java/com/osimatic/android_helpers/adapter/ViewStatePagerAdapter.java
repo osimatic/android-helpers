@@ -1,4 +1,4 @@
-package com.osimatic.android_helpers.Adapter;
+package com.osimatic.android_helpers.adapter;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;

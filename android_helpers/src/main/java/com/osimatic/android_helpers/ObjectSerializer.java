@@ -1,6 +1,6 @@
 package com.osimatic.android_helpers;
 
-import com.osimatic.android_helpers.Exception.WrappedIOException;
+import com.osimatic.android_helpers.exception.WrappedIOException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
