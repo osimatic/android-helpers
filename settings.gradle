@@ -13,5 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Android Helpers"
-include ':app'
 include ':android_helpers'
