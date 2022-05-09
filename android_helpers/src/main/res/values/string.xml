@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="ok">OK</string>
+	<string name="error">Error</string>
+	<string name="loading">Loading</string>
+
+	<!-- Date -->
+	<string name="formatted_date">On %s</string>
+	<string name="formatted_date_time" formatted="false">On %s at %s</string>
+	<string name="formatted_period" formatted="false">From %s to %s</string>
+	<string name="formatted_time_slot" formatted="false">From %s to %s</string>
+	<string name="time_at">at</string>
+
+	<!-- Coordonnées -->
+	<string name="mr">Mr.</string>
+	<string name="mrs">Mrs.</string>
+</resources>
