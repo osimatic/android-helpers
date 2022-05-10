@@ -1,4 +1,4 @@
-package com.osimatic.android_helpers.fragment;
+package com.osimatic.android_helpers.confirmation;
 
 import android.app.DialogFragment;
 import android.os.Bundle;

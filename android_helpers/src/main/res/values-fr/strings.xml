@@ -18,4 +18,20 @@
 	<!-- Coordonnées -->
 	<string name="mr">M.</string>
 	<string name="mrs">Mme</string>
+
+	<!-- Fingerprint dialog -->
+	<string name="fingerprint_dialog_title">Empreinte digitale</string>
+	<string name="fingerprint_not_recognized">Empreinte non reconnue. Réessayez.</string>
+	<string name="fingerprint_success">Empreinte reconnue</string>
+	<string name="fingerprint_use_password">Saisir mot de passe</string>
+	<string name="fingerprint_description">Apposez votre doigt sur le capteur de votre terminal pour continuer</string>
+	<string name="fingerprint_hint">Empreinte digitale</string>
+	<string name="fingerprint_password_description">Entrez votre mot de passe pour continuer</string>
+	<string name="fingerprint_password">Mot de passe</string>
+	<string name="new_fingerprint_enrolled_description">Une nouvelle empreinte digitale a été ajoutée, votre mot de passe est donc demandé.</string>
+	<string name="use_fingerprint_in_future">Utilisez l’empreinte digitale la prochaine fois</string>
+	<string name="use_fingerprint_to_authenticate_title">Utilisez votre empreinte digitale pour continuer</string>
+	<string name="use_fingerprint_to_authenticate_key">use_fingerprint_to_authenticate_key</string>
+	<string name="description_fingerprint_icon">Fingerprint icon</string>
+
 </resources>
