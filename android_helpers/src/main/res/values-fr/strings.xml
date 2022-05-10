@@ -2,6 +2,7 @@
 <resources>
 	<string name="ok">OK</string>
 	<string name="error">Erreur</string>
+	<string name="cancel">Annuler</string>
 	<string name="loading">Chargement</string>
 
 	<!-- Date -->
