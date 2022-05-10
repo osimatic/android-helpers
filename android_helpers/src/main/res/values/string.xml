@@ -5,6 +5,9 @@
 	<string name="cancel">Cancel</string>
 	<string name="loading">Loading</string>
 
+	<!-- Label -->
+	<string name="label_message">Message:</string>
+
 	<!-- Date -->
 	<string name="formatted_date">On %s</string>
 	<string name="formatted_date_time" formatted="false">On %s at %s</string>

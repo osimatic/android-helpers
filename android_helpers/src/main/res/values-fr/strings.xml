@@ -5,6 +5,9 @@
 	<string name="cancel">Annuler</string>
 	<string name="loading">Chargement</string>
 
+	<!-- Label -->
+	<string name="label_message">Message :</string>
+
 	<!-- Date -->
 	<string name="formatted_date">Le %s</string>
 	<string name="formatted_date_time" formatted="false">Du %s au %s</string>

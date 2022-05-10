@@ -5,16 +5,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.osimatic.android_helpers.R;
-import com.osimatic.android_helpers.listener.SubmitListener;
 
-public class ConfirmationFragment extends DialogFragment {
+public class ConfirmationWithMessageFragment extends DialogFragment {
+    public interface SubmitListener {
+        void onSubmit(String message);
+    }
+
     SubmitListener submitListener;
     String title;
     String confirmationMessage;
+    String enteredMessageLabel;
+    EditText enteredMessageEditText;
     String buttonText;
     int buttonTextColor = 0;
 
@@ -22,7 +28,7 @@ public class ConfirmationFragment extends DialogFragment {
     DialogFragment dialogFragment;
     Boolean dismissDialogFragmentAfterSubmit = false;
 
-    public ConfirmationFragment() {
+    public ConfirmationWithMessageFragment() {
         super();
     }
 
@@ -34,7 +40,12 @@ public class ConfirmationFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getDialog().setTitle(title);
-        View v = inflater.inflate(R.layout.confirmation_fragment, container, false);
+        View v = inflater.inflate(R.layout.confirmation_with_message_fragment, container, false);
+
+        enteredMessageEditText = v.findViewById(R.id.entered_message_edit_text);
+        if (null != enteredMessageLabel) {
+            ((TextView) v.findViewById(R.id.entered_message_label)).setText(enteredMessageLabel);
+        }
 
         ((TextView) v.findViewById(R.id.confirmation_message)).setText(confirmationMessage);
 
@@ -58,7 +69,8 @@ public class ConfirmationFragment extends DialogFragment {
             public void onClick(View v) {
                 new Thread(new Runnable() {
                     public void run() {
-                        submitListener.onSubmit();
+                        String message = enteredMessageEditText.getText().toString().trim();
+                        submitListener.onSubmit(message);
 
                         if (null != successMessage && null != getActivity()) {
                             getActivity().runOnUiThread(new Runnable() {
@@ -89,11 +101,11 @@ public class ConfirmationFragment extends DialogFragment {
         return v;
     }
 
-    public SubmitListener getSubmitListener() {
+    public ConfirmationWithMessageFragment.SubmitListener getSubmitListener() {
         return submitListener;
     }
 
-    public void setSubmitListener(SubmitListener submitListener) {
+    public void setSubmitListener(ConfirmationWithMessageFragment.SubmitListener submitListener) {
         this.submitListener = submitListener;
     }
 
@@ -111,6 +123,14 @@ public class ConfirmationFragment extends DialogFragment {
 
     public void setConfirmationMessage(String confirmationMessage) {
         this.confirmationMessage = confirmationMessage;
+    }
+
+    public String getEnteredMessageLabel() {
+        return enteredMessageLabel;
+    }
+
+    public void setEnteredMessageLabel(String enteredMessageLabel) {
+        this.enteredMessageLabel = enteredMessageLabel;
     }
 
     public String getButtonText() {
@@ -141,5 +161,5 @@ public class ConfirmationFragment extends DialogFragment {
         this.dismissDialogFragmentAfterSubmit = true;
         this.dialogFragment = dialogFragment;
     }
-
 }
+
