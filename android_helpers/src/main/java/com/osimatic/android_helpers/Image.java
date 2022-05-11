@@ -6,9 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -17,6 +19,19 @@ import java.util.Hashtable;
 
 public class Image {
 	private static String TAG = Config.START_TAG+"Image";
+
+	public static String encodeJpgFileToBase64String(Bitmap fileBitmap) {
+		return Image.encodeImageFileToBase64String(fileBitmap, Bitmap.CompressFormat.JPEG);
+	}
+	public static String encodePngFileToBase64String(Bitmap fileBitmap) {
+		return Image.encodeImageFileToBase64String(fileBitmap, Bitmap.CompressFormat.PNG);
+	}
+	private static String encodeImageFileToBase64String(Bitmap fileBitmap, Bitmap.CompressFormat compressFormat) {
+		// Conversion de la photo à uploader au format JPEG
+		ByteArrayOutputStream byteArrayOutputStreamObject = new ByteArrayOutputStream();
+		fileBitmap.compress(compressFormat, 90, byteArrayOutputStreamObject);
+		return Base64.encodeToString(byteArrayOutputStreamObject.toByteArray(), Base64.DEFAULT);
+	}
 
 	public static Bitmap getImageBitmap(Intent intent, Context context) {
 		if (intent == null) {
