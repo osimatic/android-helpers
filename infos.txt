@@ -1,0 +1,7 @@
+Publication :
+Créer une nouvelle release sur GitHub :
+https://github.com/osimatic/android-helpers/releases
+
+Aller sur :
+https://jitpack.io/#osimatic/android-helpers/
+Et cliquer sur Get it sur la ligne correspondant à la nouvelle version
