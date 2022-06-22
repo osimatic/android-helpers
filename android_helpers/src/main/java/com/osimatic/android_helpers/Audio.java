@@ -1,11 +1,37 @@
 package com.osimatic.android_helpers;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Vibrator;
 import android.util.Log;
 
 import java.io.IOException;
 
 public class Audio {
+
+	public static void playSound(Context context, int file) {
+		playSound(context, file, false);
+	}
+
+	public static void playSound(Context context, int file, boolean vibrateIfVibrateMode) {
+		AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+		if (am != null) {
+			switch (am.getRingerMode()) {
+				case AudioManager.RINGER_MODE_SILENT:
+					break;
+				case AudioManager.RINGER_MODE_VIBRATE:
+					if (vibrateIfVibrateMode) {
+						((Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE)).vibrate(400);
+					}
+					break;
+				case AudioManager.RINGER_MODE_NORMAL:
+					MediaPlayer.create(context, file).start();
+					break;
+			}
+		}
+	}
+
 	public static void playSound(String file) {
 		MediaPlayer mp = new MediaPlayer();
 		try {
