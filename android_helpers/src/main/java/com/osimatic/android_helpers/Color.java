@@ -1,5 +1,7 @@
 package com.osimatic.android_helpers;
 
+import android.util.Log;
+
 public class Color {
 	private static final float SATURATION_ADJUST = 1.3f;
 	private static final float INTENSITY_ADJUST = 0.8f;
@@ -23,6 +25,16 @@ public class Color {
 		hsv[1] = Math.min(hsv[1] * SATURATION_ADJUST, 1.0f);
 		hsv[2] = hsv[2] * INTENSITY_ADJUST;
 		return android.graphics.Color.HSVToColor(hsv);
+	}
+
+	public static String getHexaColor(int color) {
+		return getHexaColor(color, false);
+	}
+	public static String getHexaColor(int color, boolean withAlpha) {
+		if (withAlpha) {
+			return String.format("#%08x", color & 0xffffffff);
+		}
+		return String.format("#%06x", color & 0x00ffffff);
 	}
 
 	// This takes a color and computes what it would look like blended with
