@@ -109,6 +109,8 @@ public class HTTPRequest {
 			if (dataAsJson) {
 				JSONObject jsonObject = new JSONObject(data);
 				dataStr = jsonObject.toString();
+
+				headers.put("Content-Type", "application/json");
 			}
 			else {
 				String key;
