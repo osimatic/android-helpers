@@ -2,6 +2,8 @@ package com.osimatic.android_helpers;
 
 import android.util.Log;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStream;
@@ -18,7 +20,17 @@ import java.util.Set;
 public class HTTPRequest {
 	private static final String TAG = Config.START_TAG+"HTTPRequest";
 
+	public static HTTPResponse get(String url) {
+		Hashtable<String, String> data = new Hashtable<String, String>();
+		return HTTPRequest.get(url, data);
+	}
+
 	public static HTTPResponse get(String url, Hashtable<String, String> data) {
+		Hashtable<String, String> headers = new Hashtable<String, String>();
+		return HTTPRequest.get(url, data, headers);
+	}
+
+	public static HTTPResponse get(String url, Hashtable<String, String> data, Hashtable<String, String> headers) {
 		String result = "";
 		int status = 0;
 		BufferedReader reader = null;
@@ -33,7 +45,7 @@ public class HTTPRequest {
 			HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
 
 			// HTTP Headers
-			HTTPRequest.setHttpHeaders(conn);
+			HTTPRequest.setHttpHeaders(conn, headers);
 			//conn.setRequestProperty("Accept-Language", "en-GB");
 
 			// récupération du statut de la réponse
@@ -76,6 +88,15 @@ public class HTTPRequest {
 	}
 
 	public static HTTPResponse post(String url, Hashtable<String, String> data) {
+		Hashtable<String, String> headers = new Hashtable<String, String>();
+		return HTTPRequest.post(url, data, headers, false);
+	}
+
+	public static HTTPResponse post(String url, Hashtable<String, String> data, Hashtable<String, String> headers) {
+		return HTTPRequest.post(url, data, headers, false);
+	}
+
+	public static HTTPResponse post(String url, Hashtable<String, String> data, Hashtable<String, String> headers, boolean dataAsJson) {
 		String result = "";
 		int status = 0;
 		//OutputStreamWriter writer = null;
@@ -85,13 +106,19 @@ public class HTTPRequest {
 		try {
 			// encodage des paramètres de la requête
 			String dataStr = "";
-			String key;
-			Set<String> set = data.keySet();
-			for (String aSet : set) {
-				key = aSet;
-				//System.out.println(key + ": " + data.get(key));
-				//dataStr += "&" + URLEncoder.encode(key, "ISO-8859-1") + "=" + URLEncoder.encode(data.get(key), "ISO-8859-1");
-				dataStr += "&" + URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(data.get(key), "UTF-8");
+			if (dataAsJson) {
+				JSONObject jsonObject = new JSONObject(data);
+				dataStr = jsonObject.toString();
+			}
+			else {
+				String key;
+				Set<String> set = data.keySet();
+				for (String aSet : set) {
+					key = aSet;
+					//System.out.println(key + ": " + data.get(key));
+					//dataStr += "&" + URLEncoder.encode(key, "ISO-8859-1") + "=" + URLEncoder.encode(data.get(key), "ISO-8859-1");
+					dataStr += "&" + URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(data.get(key), "UTF-8");
+				}
 			}
 
 			Log.d(TAG, "URL : "+url+" ; POST data : "+dataStr);
@@ -103,7 +130,7 @@ public class HTTPRequest {
 			conn.setDoOutput(true);
 
 			// HTTP Headers
-			HTTPRequest.setHttpHeaders(conn);
+			HTTPRequest.setHttpHeaders(conn, headers);
 			//conn.setRequestProperty("Accept-Language", "en-GB");
 
 			// envoi de la requête
@@ -155,11 +182,6 @@ public class HTTPRequest {
 		return new HTTPResponse(status, result);
 	}
 
-	public static HTTPResponse get(String url) {
-		Hashtable<String, String> data = new Hashtable<String, String>();
-		return HTTPRequest.get(url, data);
-	}
-
 	public static String buildQueryString(Hashtable<String, String> data) {
 		// encodage des paramètres de la requête
 		String dataStr = "";
@@ -176,9 +198,13 @@ public class HTTPRequest {
 		return dataStr;
 	}
 
-	public static void setHttpHeaders(HttpURLConnection conn) {
+	public static void setHttpHeaders(HttpURLConnection conn, Hashtable<String, String> headers) {
 		//Locale current = getResources().getConfiguration().locale;
 		conn.setRequestProperty("Accept-Language", Locale.getDefault().toString().replace("_", "-"));
+		Set<String> keys = headers.keySet();
+		for (String key : keys) {
+			conn.setRequestProperty(key, headers.get(key));
+		}
 	}
 
 }
