@@ -184,7 +184,16 @@ public class HTTPRequest {
 		return new HTTPResponse(status, result);
 	}
 
-	public static String buildQueryString(Hashtable<String, String> data) {
+	public static void setHttpHeaders(HttpURLConnection conn, Hashtable<String, String> headers) {
+		//Locale current = getResources().getConfiguration().locale;
+		conn.setRequestProperty("Accept-Language", Locale.getDefault().toString().replace("_", "-"));
+		Set<String> keys = headers.keySet();
+		for (String key : keys) {
+			conn.setRequestProperty(key, headers.get(key));
+		}
+	}
+
+	@Deprecated public static String buildQueryString(Hashtable<String, String> data) {
 		// encodage des paramètres de la requête
 		String dataStr = "";
 		String key;
@@ -198,15 +207,6 @@ public class HTTPRequest {
 			}
 		}
 		return dataStr;
-	}
-
-	public static void setHttpHeaders(HttpURLConnection conn, Hashtable<String, String> headers) {
-		//Locale current = getResources().getConfiguration().locale;
-		conn.setRequestProperty("Accept-Language", Locale.getDefault().toString().replace("_", "-"));
-		Set<String> keys = headers.keySet();
-		for (String key : keys) {
-			conn.setRequestProperty(key, headers.get(key));
-		}
 	}
 
 }

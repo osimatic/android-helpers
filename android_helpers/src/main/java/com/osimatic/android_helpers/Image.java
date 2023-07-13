@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.Hashtable;
 
 public class Image {
@@ -61,16 +62,16 @@ public class Image {
 	}
 
 	public static Bitmap getImageBitmap(String url) {
-		return getImageBitmap(url, new Hashtable<String, String>());
+		return getImageBitmap(url, new HashMap<String, String>());
 	}
 
-	public static Bitmap getImageBitmap(String url, Hashtable<String, String> data) {
+	public static Bitmap getImageBitmap(String url, HashMap<String, String> data) {
 		Log.d(TAG, "getImageBitmap");
 		Bitmap bm = null;
 		InputStream is = null;
 		BufferedInputStream bis = null;
 		try {
-			url += (url.contains("?")?"":"?") + HTTPRequest.buildQueryString(data);
+			url += (url.contains("?")?"":"?") + com.osimatic.android_helpers.URL.buildQueryString(data);
 			URL aURL = new URL(url);
 			URLConnection conn = aURL.openConnection();
 			conn.connect();

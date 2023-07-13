@@ -11,6 +11,16 @@ public class HTTPResponse {
 	public static final int HTTP_STATUS_UPDATED = 204;
 	public static final int HTTP_STATUS_DELETED = 204;
 
+	public interface SuccessListener<T> {
+		/** Called when a response is received. */
+		void onSuccess(T response);
+	}
+
+	public interface ErrorListener {
+		/** Called when a response is received. */
+		void onError(int httpResponseCode, String data);
+	}
+
 	private int statusCode;
 	private String data;
 
