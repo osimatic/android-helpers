@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 public class Form {
 	public static void setStyleRadioButton(RadioButton radioButton, int selectedColor) {
 		radioButton.setTextColor(androidx.appcompat.R.attr.showText);
@@ -25,9 +27,13 @@ public class Form {
 
 	public static String getErrorMessage(Object json) {
 		try {
-			JSONObject errorObject = Form.getErrorJsonObject(json);
-			if (null != errorObject) {
-				return errorObject.getString("error_description");
+			if (json instanceof JSONArray) {
+				return ((JSONArray) json).getString(1);
+			}
+
+			JSONObject errorObject = Form.getErrorObject(json);
+			if (null != errorObject && errorObject.has("message")) {
+				return errorObject.getString("message");
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -37,7 +43,11 @@ public class Form {
 
 	public static String getErrorKey(Object json) {
 		try {
-			JSONObject errorObject = Form.getErrorJsonObject(json);
+			if (json instanceof JSONArray) {
+				return ((JSONArray) json).getString(0);
+			}
+
+			JSONObject errorObject = Form.getErrorObject(json);
 			if (null != errorObject) {
 				return errorObject.getString("error");
 			}
@@ -47,7 +57,7 @@ public class Form {
 		return null;
 	}
 
-	private static JSONObject getErrorJsonObject(Object json) {
+	private static JSONObject getErrorObject(Object json) {
 		JSONObject jsonResultObject;
 		try {
 			if (json instanceof JSONObject && (jsonResultObject = ((JSONObject) json)).has("error")) {
@@ -62,11 +72,11 @@ public class Form {
 		return null;
 	}
 
-	public static String getListErrors(JSONArray jsonArray) {
+	public static String getListErrors(JSONArray jsonErrors) {
 		String errors = "";
 		try {
-			for (int i=0; i<jsonArray.length();i++) {
-				errors += jsonArray.getJSONObject(i).getString("error_description");
+			for (int i=0; i<jsonErrors.length();i++) {
+				errors += getErrorMessage(jsonErrors.getJSONObject(i))+"\n";
 			}
 		}
 		catch (JSONException e) {
@@ -74,4 +84,20 @@ public class Form {
 		}
 		return errors;
 	}
+
+	public static boolean isFormError(JSONArray jsonErrors, String[] formErrorKeys) {
+		String errors = "";
+		try {
+			for (int i=0; i<jsonErrors.length();i++) {
+				if (Arrays.asList(formErrorKeys).contains(getErrorKey(jsonErrors.getJSONObject(i)))) {
+					return true;
+				}
+			}
+		}
+		catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }
