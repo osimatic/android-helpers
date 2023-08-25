@@ -18,9 +18,7 @@ public class Form {
 	public static void setStyleRadioButton(RadioButton radioButton, int selectedColor) {
 		radioButton.setTextColor(androidx.appcompat.R.attr.showText);
 		//radioButtonTypePointage.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.text_noir));
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			radioButton.setButtonTintList(ColorStateList.valueOf(selectedColor));
-		}
+		radioButton.setButtonTintList(ColorStateList.valueOf(selectedColor));
 		radioButton.setVisibility(View.VISIBLE);
 		radioButton.setLayoutParams(new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 	}
@@ -86,7 +84,6 @@ public class Form {
 	}
 
 	public static boolean isFormError(JSONArray jsonErrors, String[] formErrorKeys) {
-		String errors = "";
 		try {
 			for (int i=0; i<jsonErrors.length();i++) {
 				if (Arrays.asList(formErrorKeys).contains(getErrorKey(jsonErrors.getJSONObject(i)))) {
