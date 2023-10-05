@@ -2,6 +2,7 @@ package com.osimatic.android_helpers;
 
 import android.content.res.ColorStateList;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.ActionBar;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -26,6 +28,10 @@ public class Form {
 
 	public static String getErrorMessage(Object json) {
 		try {
+			if (json instanceof String) {
+				return (String) json;
+			}
+
 			if (json instanceof JSONArray) {
 				return ((JSONArray) json).getString(1);
 			}
@@ -71,6 +77,26 @@ public class Form {
 		return null;
 	}
 
+	public static String getListErrors(String encodedJsonErrors) {
+		if (null == encodedJsonErrors) {
+			return "";
+		}
+
+		try {
+			Object json = new JSONTokener(encodedJsonErrors).nextValue();
+			if (json instanceof JSONObject) {
+				return Form.getListErrors((JSONObject) json);
+			}
+			if (json instanceof JSONArray) {
+				return Form.getListErrors((JSONArray) json);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return "";
+	}
+
 	public static String getListErrors(JSONArray jsonErrors) {
 		if (null == jsonErrors) {
 			return "";
@@ -79,7 +105,7 @@ public class Form {
 		String errors = "";
 		try {
 			for (int i=0; i<jsonErrors.length();i++) {
-				errors += getErrorMessage(jsonErrors.getJSONObject(i))+"\n";
+				errors += getErrorMessage(jsonErrors.get(i))+"\n";
 			}
 		}
 		catch (JSONException e) {
