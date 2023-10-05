@@ -15,7 +15,8 @@ public class URL {
         for (String aSet : set) {
             key = aSet;
             try {
-                dataStr += "&" + URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(data.get(key), "UTF-8");
+                String value = data.get(key);
+                dataStr += "&" + URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(null != value ? value : "", "UTF-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

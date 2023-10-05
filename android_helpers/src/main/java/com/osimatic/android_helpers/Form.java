@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class Form {
 	public static void setStyleRadioButton(RadioButton radioButton, int selectedColor) {
@@ -71,6 +72,10 @@ public class Form {
 	}
 
 	public static String getListErrors(JSONArray jsonErrors) {
+		if (null == jsonErrors) {
+			return "";
+		}
+
 		String errors = "";
 		try {
 			for (int i=0; i<jsonErrors.length();i++) {
@@ -80,6 +85,25 @@ public class Form {
 		catch (JSONException e) {
 			e.printStackTrace();
 		}
+		return errors;
+	}
+
+	public static String getListErrors(JSONObject jsonErrors) {
+		if (null == jsonErrors) {
+			return "";
+		}
+
+		String errors = "";
+
+		try {
+			for (Iterator<String> it = jsonErrors.keys(); it.hasNext(); ) {
+				String key = it.next();
+				errors += jsonErrors.getString(key) + "\n";
+			}
+		} catch (JSONException var3) {
+			var3.printStackTrace();
+		}
+
 		return errors;
 	}
 
