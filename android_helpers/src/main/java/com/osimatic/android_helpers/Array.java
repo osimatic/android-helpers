@@ -1,9 +1,16 @@
 package com.osimatic.android_helpers;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
 public class Array {
+
+	public static void removeNullValues(HashMap<String, String> array) {
+		array.values().removeAll(Collections.singleton(null));
+	}
+
 	public static Hashtable<String, String> merge(Hashtable<String, String> array1, Hashtable<String, String> array2) {
 		for(Map.Entry<String, String> entry : array1.entrySet()) {
 			if (!array2.containsKey(entry.getKey())) {
