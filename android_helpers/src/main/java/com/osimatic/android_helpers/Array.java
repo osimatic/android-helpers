@@ -39,11 +39,11 @@ public class Array {
 	 *  in which case the return type is Object[]
 	 *
 	 * <pre>
-	 * ArrayUtils.add(null, null)      = IllegalArgumentException
-	 * ArrayUtils.add(null, "a")       = ["a"]
-	 * ArrayUtils.add(["a"], null)     = ["a", null]
-	 * ArrayUtils.add(["a"], "b")      = ["a", "b"]
-	 * ArrayUtils.add(["a", "b"], "c") = ["a", "b", "c"]
+	 * ArrayUtils.add(null, null) 		= IllegalArgumentException
+	 * ArrayUtils.add(null, "a") 		= ["a"]
+	 * ArrayUtils.add(["a"], null) 		= ["a", null]
+	 * ArrayUtils.add(["a"], "b") 		= ["a", "b"]
+	 * ArrayUtils.add(["a", "b"], "c") 	= ["a", "b", "c"]
 	 * </pre>
 	 *
 	 * @param <T> the component type of the array

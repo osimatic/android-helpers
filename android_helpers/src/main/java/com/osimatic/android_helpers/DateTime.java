@@ -31,16 +31,6 @@ public class DateTime {
 				DateTime.formatDateShort(calendar, locale, timeZone),
 				DateTime.formatTime(calendar, locale, timeZone));
 	}
-	public static String formatPeriod(Calendar startCalendar, Calendar endCalendar, Resources r, Locale locale, String timeZone) {
-		return String.format(r.getString(R.string.formatted_period),
-				DateTime.formatDateShort(startCalendar, locale, timeZone),
-				DateTime.formatDateShort(endCalendar, locale, timeZone));
-	}
-	public static String formatTimeSlot(Calendar startCalendar, Calendar endCalendar, Resources r, Locale locale, String timeZone) {
-		return String.format(r.getString(R.string.formatted_time_slot),
-				DateTime.formatTime(startCalendar, locale, timeZone),
-				DateTime.formatTime(endCalendar, locale, timeZone));
-	}
 
 	public static String getSqlDate(Calendar calendar) {
 		return (new java.sql.Date(calendar.getTimeInMillis())).toString();
@@ -200,5 +190,20 @@ public class DateTime {
 				throw new IllegalArgumentException("Argument must be between Time.SUNDAY and " +
 						"Time.SATURDAY");
 		}
+	}
+
+
+	/** @deprecated */
+	public static String formatPeriod(Calendar startCalendar, Calendar endCalendar, Resources r, Locale locale, String timeZone) {
+		return String.format(r.getString(R.string.formatted_period),
+				DateTime.formatDateShort(startCalendar, locale, timeZone),
+				DateTime.formatDateShort(endCalendar, locale, timeZone));
+	}
+
+	/** @deprecated */
+	public static String formatTimeSlot(Calendar startCalendar, Calendar endCalendar, Resources r, Locale locale, String timeZone) {
+		return String.format(r.getString(R.string.formatted_time_slot),
+				DateTime.formatTime(startCalendar, locale, timeZone),
+				DateTime.formatTime(endCalendar, locale, timeZone));
 	}
 }

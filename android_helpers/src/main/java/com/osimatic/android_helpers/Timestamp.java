@@ -60,16 +60,6 @@ public class Timestamp {
 				Timestamp.formatDateShort(timestampInMillis, locale, timeZone),
 				Timestamp.formatTime(timestampInMillis, locale, timeZone));
 	}
-	public static String formatPeriod(long startTimestampInMillis, long endTimestampInMillis, Resources r, Locale locale, String timeZone) {
-		return String.format(r.getString(R.string.formatted_period),
-				Timestamp.formatDateShort(startTimestampInMillis, locale, timeZone),
-				Timestamp.formatDateShort(endTimestampInMillis, locale, timeZone));
-	}
-	public static String formatTimeSlot(long startTimestampInMillis, long endTimestampInMillis, Resources r, Locale locale, String timeZone) {
-		return String.format(r.getString(R.string.formatted_time_slot),
-				Timestamp.formatTime(startTimestampInMillis, locale, timeZone),
-				Timestamp.formatTime(endTimestampInMillis, locale, timeZone));
-	}
 
 
 	public static long make(int year, int month, int day, String timeZone) {
@@ -93,5 +83,20 @@ public class Timestamp {
 	}
 	public static long getLastDayOfMonth(int year, int month, String timeZone) {
 		return make(year, month, DateTime.getNumberOfDaysOfMonth(year, month), timeZone);
+	}
+
+
+	/** @deprecated */
+	public static String formatPeriod(long startTimestampInMillis, long endTimestampInMillis, Resources r, Locale locale, String timeZone) {
+		return String.format(r.getString(R.string.formatted_period),
+				Timestamp.formatDateShort(startTimestampInMillis, locale, timeZone),
+				Timestamp.formatDateShort(endTimestampInMillis, locale, timeZone));
+	}
+
+	/** @deprecated */
+	public static String formatTimeSlot(long startTimestampInMillis, long endTimestampInMillis, Resources r, Locale locale, String timeZone) {
+		return String.format(r.getString(R.string.formatted_time_slot),
+				Timestamp.formatTime(startTimestampInMillis, locale, timeZone),
+				Timestamp.formatTime(endTimestampInMillis, locale, timeZone));
 	}
 }
