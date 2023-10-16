@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.osimatic.mytime.duration_picker.DurationPicker
+<com.osimatic.android_helpers.duration_picker.DurationPicker
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/timeDurationInput"
     android:layout_width="match_parent"
