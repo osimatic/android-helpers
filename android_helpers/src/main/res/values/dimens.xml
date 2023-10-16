@@ -1,0 +1,7 @@
+<resources>
+	<!-- ========== DURATION PICKER ========== -->
+
+	<dimen name="touchable">40dp</dimen>
+	<dimen name="controlHPadding">6dp</dimen>
+	<dimen name="controlVPadding">2dp</dimen>
+</resources>

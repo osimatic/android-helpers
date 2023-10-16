@@ -39,4 +39,84 @@
 		<item name="android:paddingBottom">10dp</item>
 		<item name="android:textStyle">bold</item>
 	</style>
+
+
+	<!-- ========== DURATION PICKER ========== -->
+
+	<!-- text appearance -->
+	<style name="TextAppearance.DurationPicker" parent="TextAppearance.AppCompat.Body1"/>
+
+	<style name="TextAppearance.DurationPicker.Display">
+		<item name="android:textSize">34sp</item>
+	</style>
+	<style name="TextAppearance.DurationPicker.Unit">
+		<item name="android:textSize">12sp</item>
+	</style>
+	<style name="TextAppearance.DurationPicker.Button">
+		<item name="android:textSize">24sp</item>
+	</style>
+
+	<style name="TextAppearance.DurationPicker.Display.Large">
+		<item name="android:textSize">45sp</item>
+	</style>
+	<style name="TextAppearance.DurationPicker.Unit.Large">
+		<item name="android:textSize">12sp</item>
+	</style>
+	<style name="TextAppearance.DurationPicker.Button.Large">
+		<item name="android:textSize">34sp</item>
+	</style>
+
+	<style name="TextAppearance.DurationPicker.Display.Dark">
+		<item name="android:textColor">@android:color/primary_text_dark</item>
+	</style>
+	<style name="TextAppearance.DurationPicker.Unit.Dark">
+		<item name="android:textColor">@android:color/primary_text_dark</item>
+	</style>
+
+	<style name="TextAppearance.DurationPicker.Display.Large.Dark">
+		<item name="android:textColor">@android:color/primary_text_dark</item>
+	</style>
+	<style name="TextAppearance.DurationPicker.Unit.Large.Dark">
+		<item name="android:textColor">@android:color/primary_text_dark</item>
+	</style>
+
+	<style name="Widget"/>
+	<style name="Widget.DurationPicker">
+		<item name="textAppearanceDisplay">@style/TextAppearance.DurationPicker.Display</item>
+		<item name="textAppearanceUnit">@style/TextAppearance.DurationPicker.Unit</item>
+		<item name="textAppearanceButton">@style/TextAppearance.DurationPicker.Button</item>
+		<item name="backspaceIcon">@drawable/ic_backspace</item>
+		<item name="clearIcon">@drawable/ic_clear</item>
+	</style>
+	<style name="Widget.DurationPicker.Large">
+		<item name="textAppearanceDisplay">@style/TextAppearance.DurationPicker.Display.Large</item>
+		<item name="textAppearanceUnit">@style/TextAppearance.DurationPicker.Unit.Large</item>
+		<item name="textAppearanceButton">@style/TextAppearance.DurationPicker.Button.Large</item>
+	</style>
+
+	<style name="Widget.DurationPicker.Light">
+		<item name="backspaceIcon">@drawable/ic_backspace_light</item>
+		<item name="clearIcon">@drawable/ic_backspace_light</item>
+	</style>
+	<style name="Widget.DurationPicker.Large.Light">
+		<item name="backspaceIcon">@drawable/ic_backspace_light</item>
+		<item name="clearIcon">@drawable/ic_backspace_light</item>
+	</style>
+
+	<style name="Widget.DurationPicker.Dialog">
+		<item name="durationDisplayBackground">?colorControlActivated</item>
+		<item name="textAppearanceDisplay">@style/TextAppearance.DurationPicker.Display.Large.Dark</item>
+		<item name="textAppearanceUnit">@style/TextAppearance.DurationPicker.Unit.Large.Dark</item>
+	</style>
+
+	<!-- internal stuff -->
+	<style name="Widget.DurationPicker.NumPadButton" parent="Widget.AppCompat.Button.Borderless">
+		<item name="android:layout_width">0dp</item>
+		<item name="android:layout_height">match_parent</item>
+		<item name="android:layout_weight">1</item>
+		<item name="android:minWidth">@dimen/touchable</item>
+		<item name="android:minHeight">@dimen/touchable</item>
+		<item name="android:textAppearance">@style/TextAppearance.DurationPicker.Display</item>
+		<item name="android:background">?selectableItemBackgroundBorderless</item>
+	</style>
 </resources>
