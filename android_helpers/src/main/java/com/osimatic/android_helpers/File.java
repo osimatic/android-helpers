@@ -40,12 +40,12 @@ public class File {
 	}*/
 
 	public static void writeFileOnInternalStorage(Context context, String directory, String fileName, String data) {
-		java.io.File dir = new java.io.File(context.getFilesDir(), directory);
-		if (!dir.exists()) {
-			dir.mkdir();
-		}
-
 		try {
+			java.io.File dir = new java.io.File(context.getFilesDir(), directory);
+			if (!dir.exists()) {
+				dir.mkdir();
+			}
+
 			java.io.File gpxfile = new java.io.File(dir, fileName);
 			FileWriter writer = new FileWriter(gpxfile);
 			writer.append(data);
@@ -56,5 +56,12 @@ public class File {
 		}
 	}
 
+	public static void writeFileOnInternalStorage(Context context, String directory, String fileName, byte[] data) {
+		String strData = "";
+		for (byte b: data) {
+			strData += Byte.toString(b);
+		}
+		File.writeFileOnInternalStorage(context, directory, fileName, strData);
+	}
 
 }
