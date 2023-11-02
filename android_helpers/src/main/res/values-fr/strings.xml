@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="yes">Oui</string>
+	<string name="no">Non</string>
 	<string name="ok">OK</string>
 	<string name="error">Erreur</string>
+	<string name="submit">Valider</string>
+	<string name="_continue">Continuer</string>
 	<string name="cancel">Annuler</string>
+	<string name="close">Fermer</string>
 	<string name="loading">Chargement</string>
-
-	<!-- Label -->
-	<string name="label_message">Message :</string>
+	<string name="select">Choisissez…</string>
+	<string name="none_male">Aucun</string>
+	<string name="none_female">Aucune</string>
+	<string name="all_male">Tous</string>
+	<string name="all_female">Toute</string>
+	<string name="with">Avec</string>
+	<string name="without">Sans</string>
 
 	<!-- Date -->
 	<string name="formatted_date">Le %s</string>
@@ -14,10 +23,35 @@
 	<string name="formatted_period" formatted="false">Du %s au %s</string>
 	<string name="formatted_time_slot" formatted="false">De %s à %s</string>
 	<string name="time_at">à</string>
+	<string name="year">Année</string>
+	<string name="month">Mois</string>
+	<string name="week">Semaine</string>
+	<string name="day">Jour</string>
+	<string name="hour">Heure</string>
+	<string name="minute">Minute</string>
+	<string name="second">Seconde</string>
+	<string name="daytime">Journée</string>
+	<string name="today">Aujourd’hui</string>
+	<string name="morning">Matin</string>
+	<string name="afternoon">Après-midi</string>
+	<string name="monday">Lundi</string>
+	<string name="tuesday">Mardi</string>
+	<string name="wednesday">Mercredi</string>
+	<string name="thursday">Jeudi</string>
+	<string name="friday">Vendredi</string>
+	<string name="saturday">Samedi</string>
+	<string name="sunday">Dimanche</string>
 
 	<!-- Coordonnées -->
 	<string name="mr">M.</string>
 	<string name="mrs">Mme</string>
+
+	<!-- File size -->
+	<string name="file_size_bytes">B</string>
+	<string name="file_size_kilobytes">kB</string>
+	<string name="file_size_megabytes">MB</string>
+	<string name="file_size_gigabytes">GB</string>
+	<string name="file_size_terrabytes">TB</string>
 
 	<!-- Fingerprint dialog -->
 	<string name="fingerprint_dialog_title">Empreinte digitale</string>
@@ -33,5 +67,21 @@
 	<string name="use_fingerprint_to_authenticate_title">Utilisez votre empreinte digitale pour continuer</string>
 	<string name="use_fingerprint_to_authenticate_key">use_fingerprint_to_authenticate_key</string>
 	<string name="description_fingerprint_icon">Fingerprint icon</string>
+
+	<!-- Label generic -->
+	<string name="label_message">Message :</string>
+
+	<!-- Label user -->
+	<string name="label_name">Nom :</string>
+	<string name="label_email">Adresse e-mail :</string>
+	<string name="label_landline_number">Téléphone fixe :</string>
+	<string name="label_mobile_number">Téléphone mobile :</string>
+	<string name="label_address">Adresse :</string>
+
+	<!-- Label date -->
+	<string name="label_date">Date :</string>
+	<string name="label_time">Heure :</string>
+	<string name="label_date_time">Date &amp; Heure :</string>
+	<string name="label_period">Période :</string>
 
 </resources>

@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
 	<string name="ok">OK</string>
 	<string name="error">Error</string>
+	<string name="submit">Submit</string>
+	<string name="_continue">Continue</string>
 	<string name="cancel">Cancel</string>
+	<string name="close">Close</string>
 	<string name="loading">Loading</string>
-
-	<!-- Label -->
-	<string name="label_message">Message:</string>
+	<string name="select">Select…</string>
+	<string name="none_male">None</string>
+	<string name="none_female">None</string>
+	<string name="all_male">All</string>
+	<string name="all_female">All</string>
+	<string name="with">With</string>
+	<string name="without">Without</string>
 
 	<!-- Date -->
 	<string name="formatted_date">On %s</string>
@@ -14,10 +23,35 @@
 	<string name="formatted_period" formatted="false">From %s to %s</string>
 	<string name="formatted_time_slot" formatted="false">From %s to %s</string>
 	<string name="time_at">at</string>
+	<string name="year">Year</string>
+	<string name="month">Month</string>
+	<string name="week">Week</string>
+	<string name="day">Day</string>
+	<string name="hour">Hour</string>
+	<string name="minute">Minute</string>
+	<string name="second">Second</string>
+	<string name="daytime">Daytime</string>
+	<string name="today">Today</string>
+	<string name="morning">Morning</string>
+	<string name="afternoon">Afternoon</string>
+	<string name="monday">Monday</string>
+	<string name="tuesday">Tuesday</string>
+	<string name="wednesday">Wednesday</string>
+	<string name="thursday">Thursday</string>
+	<string name="friday">Friday</string>
+	<string name="saturday">Saturday</string>
+	<string name="sunday">Sunday</string>
 
 	<!-- Coordonnées -->
 	<string name="mr">Mr.</string>
 	<string name="mrs">Mrs.</string>
+
+	<!-- File size -->
+	<string name="file_size_bytes">o</string>
+	<string name="file_size_kilobytes">Ko</string>
+	<string name="file_size_megabytes">Mo</string>
+	<string name="file_size_gigabytes">Go</string>
+	<string name="file_size_terrabytes">To</string>
 
 	<!-- Fingerprint dialog -->
 	<string name="fingerprint_dialog_title">Fingerprint</string>
@@ -33,4 +67,20 @@
 	<string name="use_fingerprint_to_authenticate_title">Use fingerprint to authenticate</string>
 	<string name="use_fingerprint_to_authenticate_key">use_fingerprint_to_authenticate_key</string>
 	<string name="description_fingerprint_icon">Fingerprint icon</string>
+
+	<!-- Label generic -->
+	<string name="label_message">Message:</string>
+
+	<!-- Label user -->
+	<string name="label_name">Name:</string>
+	<string name="label_email">Email address:</string>
+	<string name="label_landline_number">Phone number:</string>
+	<string name="label_mobile_number">Mobile number:</string>
+	<string name="label_address">Address:</string>
+
+	<!-- Label date -->
+	<string name="label_date">Date:</string>
+	<string name="label_time">Time:</string>
+	<string name="label_date_time">Date &amp; Time:</string>
+	<string name="label_period">Period:</string>
 </resources>
