@@ -3,9 +3,14 @@ package com.osimatic.android_helpers;
 import android.app.DownloadManager;
 import android.content.res.Resources;
 import android.content.Context;
+import android.net.Uri;
+import android.os.Environment;
 
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class File {
 
@@ -39,6 +44,31 @@ public class File {
 		}
 	}*/
 
+	public static void downloadFile(Context context, String url, HashMap<String, String> httpHeaders, String fileName, String description, String mimeType) {
+		DownloadManager.Request request1 = new DownloadManager.Request(Uri.parse(url));
+		if (null != description) {
+			request1.setDescription(description); //appears the same in Notification bar while downloading
+		}
+		request1.setTitle(fileName);
+		request1.setVisibleInDownloadsUi(false);
+		request1.allowScanningByMediaScanner();
+		if (null != mimeType) {
+			request1.setMimeType(mimeType);
+		}
+
+		if (null != httpHeaders) {
+			for (String headerName: httpHeaders.keySet()) {
+				request1.addRequestHeader(headerName, httpHeaders.get(headerName));
+			}
+		}
+
+		request1.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+		request1.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+
+		DownloadManager manager1 = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+		Objects.requireNonNull(manager1).enqueue(request1);
+	}
+
 	public static void writeFileOnInternalStorage(Context context, String directory, String fileName, String data) {
 		try {
 			java.io.File dir = new java.io.File(context.getFilesDir(), directory);
@@ -46,8 +76,16 @@ public class File {
 				dir.mkdir();
 			}
 
-			java.io.File gpxfile = new java.io.File(dir, fileName);
-			FileWriter writer = new FileWriter(gpxfile);
+			String filePath = context.getFilesDir()+"/"+directory+fileName;
+			File.writeFile(filePath, data);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	public static void writeFile(String filePath, String data) {
+		try {
+			FileWriter writer = new FileWriter(filePath);
 			writer.append(data);
 			writer.flush();
 			writer.close();
@@ -56,12 +94,15 @@ public class File {
 		}
 	}
 
-	public static void writeFileOnInternalStorage(Context context, String directory, String fileName, byte[] data) {
-		String strData = "";
-		for (byte b: data) {
-			strData += Byte.toString(b);
+	public static void writeFile(String filePath, byte[] data) {
+		try {
+			try (FileOutputStream output = new FileOutputStream(filePath)) {
+				output.write(data);
+				output.flush();
+				output.close();
+			}
+		} catch (Exception e){
+			e.printStackTrace();
 		}
-		File.writeFileOnInternalStorage(context, directory, fileName, strData);
 	}
-
 }
