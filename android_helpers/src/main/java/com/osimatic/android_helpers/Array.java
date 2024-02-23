@@ -1,5 +1,7 @@
 package com.osimatic.android_helpers;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -25,6 +27,20 @@ public class Array {
 			} */
 		}
 		return array2;
+	}
+
+	public interface Predicate<T> {
+		boolean apply(T type);
+	}
+
+	public static <T> Collection<T> filter(Collection<T> target, Predicate<T> predicate) {
+		Collection<T> result = new ArrayList<T>();
+		for (T element: target) {
+			if (predicate.apply(element)) {
+				result.add(element);
+			}
+		}
+		return result;
 	}
 
 	/**
