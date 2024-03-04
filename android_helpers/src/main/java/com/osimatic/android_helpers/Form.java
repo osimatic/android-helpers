@@ -136,7 +136,7 @@ public class Form {
 	public static boolean isFormError(JSONArray jsonErrors, String[] formErrorKeys) {
 		try {
 			for (int i=0; i<jsonErrors.length();i++) {
-				if (Arrays.asList(formErrorKeys).contains(getErrorKey(jsonErrors.getJSONObject(i)))) {
+				if (Arrays.asList(formErrorKeys).contains(getErrorKey(jsonErrors.get(i)))) {
 					return true;
 				}
 			}
