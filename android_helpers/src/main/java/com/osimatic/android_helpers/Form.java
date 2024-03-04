@@ -147,4 +147,14 @@ public class Form {
 		return false;
 	}
 
+	public static boolean isFormError(JSONObject jsonErrors, String[] formErrorKeys) {
+		for (Iterator<String> it = jsonErrors.keys(); it.hasNext(); ) {
+			String key = it.next();
+			if (Arrays.asList(formErrorKeys).contains(key)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
