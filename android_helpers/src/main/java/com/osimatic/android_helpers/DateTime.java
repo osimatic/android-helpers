@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class DateTime {
 	// ------------------------------------------------------------
@@ -41,8 +42,12 @@ public class DateTime {
 	}
 
 	public static Calendar parse(String sqlDateTime) {
+		return DateTime.parse(sqlDateTime, TimeZone.getTimeZone("UTC"));
+	}
+	public static Calendar parse(String sqlDateTime, TimeZone timeZone) {
 		try {
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+			df.setTimeZone(timeZone);
 			Calendar calendar = Calendar.getInstance();
 			Date date = df.parse(sqlDateTime);
 			if (date != null) {
