@@ -1,31 +1,33 @@
 package com.osimatic.android_helpers.adapter;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.lifecycle.Lifecycle;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewStatePagerAdapter extends FragmentStatePagerAdapter {
+public class ViewStatePagerAdapter extends FragmentStateAdapter {
 	private final List<Fragment> mFragmentList = new ArrayList<>();
 
-	public ViewStatePagerAdapter(FragmentManager fm) {
-		super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+	public ViewStatePagerAdapter(FragmentManager fm, Lifecycle lifecycle) {
+		super(fm, lifecycle);
 	}
 
+	@NonNull
 	@Override
-	public Fragment getItem(int position) {
+	public Fragment createFragment(int position) {
 		return mFragmentList.get(position);
 	}
 
 	@Override
-	public int getCount() {
+	public int getItemCount() {
 		return mFragmentList.size();
 	}
 
 	public void addFragment(Fragment fragment) {
 		mFragmentList.add(fragment);
 	}
-
 }
