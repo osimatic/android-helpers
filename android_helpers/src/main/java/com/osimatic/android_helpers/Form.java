@@ -17,7 +17,7 @@ import java.util.Iterator;
 
 public class Form {
 	public static void setStyleRadioButton(RadioButton radioButton, int selectedColor) {
-		radioButton.setTextColor(androidx.appcompat.R.attr.showText);
+		//radioButton.setTextColor(androidx.appcompat.R.attr.showText);
 		//radioButtonTypePointage.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.text_noir));
 		radioButton.setButtonTintList(ColorStateList.valueOf(selectedColor));
 		radioButton.setVisibility(View.VISIBLE);
