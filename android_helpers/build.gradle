@@ -1,14 +1,13 @@
 plugins {
-    id 'maven-publish'
     id 'com.android.library'
 }
 
 android {
-    compileSdk 34
+    compileSdk 31
 
     defaultConfig {
         minSdk 21
-        targetSdk 34
+        targetSdk 31
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -20,11 +19,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    /*compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_10
-        targetCompatibility JavaVersion.VERSION_1_10
-    }*/
-    namespace 'com.osimatic.android_helpers'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {

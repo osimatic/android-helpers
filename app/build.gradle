@@ -1,15 +1,14 @@
 plugins {
-    id 'maven-publish'
     id 'com.android.application'
 }
 
 android {
-    compileSdk 34
+    compileSdk 31
 
     defaultConfig {
         applicationId "com.osimatic.android_helpers"
         minSdk 21
-        targetSdk 34
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
@@ -22,11 +21,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    /*compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_10
-        targetCompatibility JavaVersion.VERSION_1_10
-    }*/
-    namespace 'com.osimatic.android_helpers'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
