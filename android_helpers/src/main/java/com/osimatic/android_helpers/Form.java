@@ -1,8 +1,6 @@
 package com.osimatic.android_helpers;
 
 import android.content.res.ColorStateList;
-import android.os.Build;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
@@ -131,6 +129,26 @@ public class Form {
 		}
 
 		return errors;
+	}
+
+	public static boolean isFormError(String encodedJsonErrors, String[] formErrorKeys) {
+		if (null == encodedJsonErrors) {
+			return false;
+		}
+
+		try {
+			Object json = new JSONTokener(encodedJsonErrors).nextValue();
+			if (json instanceof JSONObject) {
+				return Form.isFormError((JSONObject) json, formErrorKeys);
+			}
+			if (json instanceof JSONArray) {
+				return Form.isFormError((JSONArray) json, formErrorKeys);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return false;
 	}
 
 	public static boolean isFormError(JSONArray jsonErrors, String[] formErrorKeys) {
