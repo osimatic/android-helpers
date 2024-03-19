@@ -9,4 +9,6 @@
 	<color name="success_color">#009688</color>
 	<color name="warning_color">#f4511e</color>
 	<color name="danger_color">#F41E1E</color>
+
+	<color name="hint_color">#42000000</color>
 </resources>
