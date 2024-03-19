@@ -199,6 +199,7 @@ public class DateTime {
 
 
 	/** @deprecated */
+	@Deprecated
 	public static String formatPeriod(Calendar startCalendar, Calendar endCalendar, Resources r, Locale locale, String timeZone) {
 		return String.format(r.getString(R.string.formatted_period),
 				DateTime.formatDateShort(startCalendar, locale, timeZone),
@@ -206,6 +207,7 @@ public class DateTime {
 	}
 
 	/** @deprecated */
+	@Deprecated
 	public static String formatTimeSlot(Calendar startCalendar, Calendar endCalendar, Resources r, Locale locale, String timeZone) {
 		return String.format(r.getString(R.string.formatted_time_slot),
 				DateTime.formatTime(startCalendar, locale, timeZone),

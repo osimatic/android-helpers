@@ -87,6 +87,7 @@ public class Timestamp {
 
 
 	/** @deprecated */
+	@Deprecated
 	public static String formatPeriod(long startTimestampInMillis, long endTimestampInMillis, Resources r, Locale locale, String timeZone) {
 		return String.format(r.getString(R.string.formatted_period),
 				Timestamp.formatDateShort(startTimestampInMillis, locale, timeZone),
@@ -94,6 +95,7 @@ public class Timestamp {
 	}
 
 	/** @deprecated */
+	@Deprecated
 	public static String formatTimeSlot(long startTimestampInMillis, long endTimestampInMillis, Resources r, Locale locale, String timeZone) {
 		return String.format(r.getString(R.string.formatted_time_slot),
 				Timestamp.formatTime(startTimestampInMillis, locale, timeZone),
