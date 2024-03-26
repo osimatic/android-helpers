@@ -46,6 +46,10 @@ public class PostalAddress {
 			addressDisplay += countryName + sep;
 		}
 
+		if (addressDisplay.isEmpty()) {
+			return "";
+		}
+
 		return addressDisplay.substring(0, (addressDisplay.length()-sep.length()));
 	}
 }
