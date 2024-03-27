@@ -9,11 +9,9 @@ import java.io.BufferedWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
 
@@ -21,22 +19,22 @@ public class HTTPRequest {
 	private static final String TAG = Config.START_TAG+"HTTPRequest";
 
 	public static HTTPResponse get(String url) {
-		Hashtable<String, String> data = new Hashtable<String, String>();
+		HashMap<String, String> data = new HashMap<String, String>();
 		return HTTPRequest.get(url, data);
 	}
 
-	public static HTTPResponse get(String url, Hashtable<String, String> data) {
-		Hashtable<String, String> headers = new Hashtable<String, String>();
+	public static HTTPResponse get(String url, HashMap<String, String> data) {
+		HashMap<String, String> headers = new HashMap<String, String>();
 		return HTTPRequest.get(url, data, headers);
 	}
 
-	public static HTTPResponse get(String url, Hashtable<String, String> data, Hashtable<String, String> headers) {
+	public static HTTPResponse get(String url, HashMap<String, String> data, HashMap<String, String> headers) {
 		String result = "";
 		int status = 0;
 		BufferedReader reader = null;
 
 		try {
-			url += (url.contains("?")?"":"?") + buildQueryString(data);
+			url += (url.contains("?")?"":"?") + com.osimatic.android_helpers.URL.buildQueryString(data);
 
 			Log.d(TAG, "URL : "+url);
 
@@ -87,16 +85,16 @@ public class HTTPRequest {
 		return new HTTPResponse(status, result);
 	}
 
-	public static HTTPResponse post(String url, Hashtable<String, String> data) {
-		Hashtable<String, String> headers = new Hashtable<String, String>();
+	public static HTTPResponse post(String url, HashMap<String, String> data) {
+		HashMap<String, String> headers = new HashMap<String, String>();
 		return HTTPRequest.post(url, data, headers, false);
 	}
 
-	public static HTTPResponse post(String url, Hashtable<String, String> data, Hashtable<String, String> headers) {
+	public static HTTPResponse post(String url, HashMap<String, String> data, HashMap<String, String> headers) {
 		return HTTPRequest.post(url, data, headers, false);
 	}
 
-	public static HTTPResponse post(String url, Hashtable<String, String> data, Hashtable<String, String> headers, boolean dataAsJson) {
+	public static HTTPResponse post(String url, HashMap<String, String> data, HashMap<String, String> headers, boolean dataAsJson) {
 		String result = "";
 		int status = 0;
 		//OutputStreamWriter writer = null;
@@ -105,25 +103,18 @@ public class HTTPRequest {
 
 		try {
 			// encodage des paramètres de la requête
-			String dataStr = "";
+			String strData = "";
 			if (dataAsJson) {
 				JSONObject jsonObject = new JSONObject(data);
-				dataStr = jsonObject.toString();
+				strData = jsonObject.toString();
 
 				headers.put("Content-Type", "application/json");
 			}
 			else {
-				String key;
-				Set<String> set = data.keySet();
-				for (String aSet : set) {
-					key = aSet;
-					//System.out.println(key + ": " + data.get(key));
-					//dataStr += "&" + URLEncoder.encode(key, "ISO-8859-1") + "=" + URLEncoder.encode(data.get(key), "ISO-8859-1");
-					dataStr += "&" + URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(data.get(key), "UTF-8");
-				}
+				strData = com.osimatic.android_helpers.URL.buildQueryString(data);
 			}
 
-			Log.d(TAG, "URL : "+url+" ; POST data : "+dataStr);
+			Log.d(TAG, "URL : "+url+" ; POST data : "+strData);
 
 			// création de la connection
 			URL urlObj = new URL(url);
@@ -138,7 +129,7 @@ public class HTTPRequest {
 			// envoi de la requête
 			//writer = new OutputStreamWriter(conn.getOutputStream());
 			writer = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-			writer.write(dataStr);
+			writer.write(strData);
 			writer.flush();
 
 			// récupération du statut de la réponse
@@ -184,7 +175,7 @@ public class HTTPRequest {
 		return new HTTPResponse(status, result);
 	}
 
-	public static void setHttpHeaders(HttpURLConnection conn, Hashtable<String, String> headers) {
+	public static void setHttpHeaders(HttpURLConnection conn, HashMap<String, String> headers) {
 		//Locale current = getResources().getConfiguration().locale;
 		conn.setRequestProperty("Accept-Language", Locale.getDefault().toString().replace("_", "-"));
 		Set<String> keys = headers.keySet();
@@ -192,21 +183,4 @@ public class HTTPRequest {
 			conn.setRequestProperty(key, headers.get(key));
 		}
 	}
-
-	@Deprecated public static String buildQueryString(Hashtable<String, String> data) {
-		// encodage des paramètres de la requête
-		String dataStr = "";
-		String key;
-		Set<String> set = data.keySet();
-		for (String aSet : set) {
-			key = aSet;
-			try {
-				dataStr += "&" + URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(data.get(key), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-		}
-		return dataStr;
-	}
-
 }

@@ -176,25 +176,17 @@ public class DateTime {
 	 * Converts the day of the week from android.text.format.Time to java.util.Calendar
 	 */
 	public static int convertDayOfWeekFromTimeToCalendar(int timeDayOfWeek) {
-		switch (timeDayOfWeek) {
-			case Time.MONDAY:
-				return Calendar.MONDAY;
-			case Time.TUESDAY:
-				return Calendar.TUESDAY;
-			case Time.WEDNESDAY:
-				return Calendar.WEDNESDAY;
-			case Time.THURSDAY:
-				return Calendar.THURSDAY;
-			case Time.FRIDAY:
-				return Calendar.FRIDAY;
-			case Time.SATURDAY:
-				return Calendar.SATURDAY;
-			case Time.SUNDAY:
-				return Calendar.SUNDAY;
-			default:
-				throw new IllegalArgumentException("Argument must be between Time.SUNDAY and " +
-						"Time.SATURDAY");
-		}
+		return switch (timeDayOfWeek) {
+			case Time.MONDAY -> Calendar.MONDAY;
+			case Time.TUESDAY -> Calendar.TUESDAY;
+			case Time.WEDNESDAY -> Calendar.WEDNESDAY;
+			case Time.THURSDAY -> Calendar.THURSDAY;
+			case Time.FRIDAY -> Calendar.FRIDAY;
+			case Time.SATURDAY -> Calendar.SATURDAY;
+			case Time.SUNDAY -> Calendar.SUNDAY;
+			default ->
+				throw new IllegalArgumentException("Argument must be between Time.SUNDAY and Time.SATURDAY");
+		};
 	}
 
 

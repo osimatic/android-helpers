@@ -22,9 +22,7 @@ public class NFC {
 	private static final String TAG = Config.START_TAG+"NFC";
 	
 	/**
-	 * Creates a custom MIME type encapsulated in an NDEF record for a given
-	 * payload
-	 *
+	 * Creates a custom MIME type encapsulated in an NDEF record for a given payload
 	 * @param mimeType String
 	 * @param payload byte[]
 	 * @return NdefRecord
@@ -51,7 +49,6 @@ public class NFC {
 
 	/**
 	 * Creates an Ndef message
-	 *
 	 * @param mimeType String
 	 * @param payload byte[]
 	 * @return NdefMessage
@@ -63,7 +60,6 @@ public class NFC {
 
 	/**
 	 * Write an NDEF message to a Tag
-	 *
 	 * @param message NdefMessage
 	 * @param tag Tag
 	 * @return true if successful, false if not written to
@@ -108,8 +104,7 @@ public class NFC {
 
 	/**
 	 * Parse an intent for non-empty strings within an NDEF message
-	 *
-	 * @param intent
+	 * @param intent intent
 	 * @return an empty list if the payload is empty
 	 */
 	public static List<String> getStringsFromNfcIntent(Intent intent) {
@@ -130,8 +125,7 @@ public class NFC {
 
 	/**
 	 * Parses an intent for NDEF messages, returns all that are found
-	 *
-	 * @param intent
+	 * @param intent intent
 	 * @return an empty list if there are no NDEF messages found
 	 */
 	public static List<NdefMessage> getMessagesFromIntent(Intent intent) {
@@ -163,9 +157,8 @@ public class NFC {
 
 	/**
 	 * A pending intent is required to enable foreground NDEF dispatch
-	 *
-	 * @param context
-	 * @return 
+	 * @param context context
+	 * @return PendingIntent
 	 */
 	public static PendingIntent getPendingIntent(Activity context) {
 		return PendingIntent.getActivity(context, 0,

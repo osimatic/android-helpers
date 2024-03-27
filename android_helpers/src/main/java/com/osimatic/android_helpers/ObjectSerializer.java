@@ -24,7 +24,7 @@ public class ObjectSerializer {
 	}
 
 	public static Object deserialize(String str) throws IOException {
-		if (str == null || str.length() == 0) return null;
+		if (str == null || str.isEmpty()) return null;
 		try {
 			ByteArrayInputStream serialObj = new ByteArrayInputStream(decodeBytes(str));
 			ObjectInputStream objStream = new ObjectInputStream(serialObj);
