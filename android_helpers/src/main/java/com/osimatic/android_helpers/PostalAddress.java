@@ -1,25 +1,39 @@
 package com.osimatic.android_helpers;
 
 public class PostalAddress {
-	public static String formatAddressForDisplay(String street1, String street2, String zipCode, String city, String countryIsoCode) {
-		return formatAddressForDisplay(street1, street2, zipCode, city, countryIsoCode, true, null);
+	public static boolean isEmpty(String street, String additionalAddress, String zipCode, String city, String countryIsoCode) {
+		return isEmpty(street, additionalAddress, zipCode, city, countryIsoCode, false);
 	}
 
-	public static String formatAddressForDisplay(String street1, String street2, String zipCode, String city, String countryIsoCode, boolean upperCase, String sep) {
+	public static boolean isEmpty(String street, String additionalAddress, String zipCode, String city, String countryIsoCode, boolean ignoreCountry) {
+		return
+			(null == street || street.isEmpty()) &&
+			(null == additionalAddress || additionalAddress.isEmpty()) &&
+			(null == zipCode || zipCode.isEmpty()) &&
+			(null == city || city.isEmpty()) &&
+			(ignoreCountry || (null == countryIsoCode || countryIsoCode.isEmpty()))
+		;
+	}
+
+	public static String formatAddressForDisplay(String street, String additionalAddress, String zipCode, String city, String countryIsoCode) {
+		return formatAddressForDisplay(street, additionalAddress, zipCode, city, countryIsoCode, true, null);
+	}
+
+	public static String formatAddressForDisplay(String street, String additionalAddress, String zipCode, String city, String countryIsoCode, boolean upperCase, String sep) {
 		sep = (sep==null?"\n":sep);
 
 		String addressDisplay = "";
 
-		// Ajout de la rue (ligne 1)
-		if (street1 != null && !street1.isEmpty()) {
-			street1 = (upperCase ? street1.toUpperCase() : street1);
-			addressDisplay += street1 + sep;
+		// Ajout de la rue
+		if (street != null && !street.isEmpty()) {
+			street = (upperCase ? street.toUpperCase() : street);
+			addressDisplay += street + sep;
 		}
 
-		// Ajout de la rue (ligne 2)
-		if (street2 != null && !street2.isEmpty()) {
-			street2 = (upperCase ? street2.toUpperCase() : street2);
-			addressDisplay += street2 + sep;
+		// Ajout du complément d'adresse
+		if (additionalAddress != null && !additionalAddress.isEmpty()) {
+			additionalAddress = (upperCase ? additionalAddress.toUpperCase() : additionalAddress);
+			addressDisplay += additionalAddress + sep;
 		}
 
 		// Ajout du code postal et ville
