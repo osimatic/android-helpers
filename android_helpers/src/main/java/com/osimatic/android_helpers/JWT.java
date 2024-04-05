@@ -5,8 +5,13 @@ public class JWT {
 		String[] chunks = token.split("\\.");
 		String[] decodedData = new String[2];
 
-		decodedData[0] = new String(android.util.Base64.decode(chunks[0], android.util.Base64.DEFAULT));
-		decodedData[1] = new String(android.util.Base64.decode(chunks[1], android.util.Base64.DEFAULT));
+		// 05/04/2024 : ne fonctionne pas avec les accents
+		//decodedData[0] = new String(android.util.Base64.decode(chunks[0], android.util.Base64.DEFAULT));
+		//decodedData[1] = new String(android.util.Base64.decode(chunks[1], android.util.Base64.DEFAULT));
+
+		java.util.Base64.Decoder decoder = java.util.Base64.getUrlDecoder();
+		decodedData[0] = new String(decoder.decode(chunks[0]));
+		decodedData[1] = new String(decoder.decode(chunks[1]));
 
 		return decodedData;
 	}
