@@ -41,6 +41,13 @@ public class Timestamp {
 		return cal;
 	}
 
+	public static Calendar toLocalCalendar(long timestampInMillis, String timeZone) {
+		Calendar zonedCalendar = Timestamp.toCalendar(timestampInMillis, timeZone);
+		Calendar localStartDate = Calendar.getInstance();
+		localStartDate.set(zonedCalendar.get(Calendar.YEAR), zonedCalendar.get(Calendar.MONTH), zonedCalendar.get(Calendar.DAY_OF_MONTH), zonedCalendar.get(Calendar.HOUR), zonedCalendar.get(Calendar.MINUTE));
+		return localStartDate;
+	}
+
 	public static String formatDateShort(long timestampInMillis, Locale locale, String timeZone) {
 		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 		//SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", locale);
