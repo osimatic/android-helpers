@@ -1,10 +1,8 @@
 package com.osimatic.android_helpers;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Collections;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Set;
 
 public class URL {
@@ -15,12 +13,8 @@ public class URL {
 		Set<String> set = data.keySet();
 		for (String aSet : set) {
 			key = aSet;
-			try {
-				String value = data.get(key);
-				dataStr += "&" + URLEncoder.encode(key, "UTF-8") + "=" + URLEncoder.encode(null != value ? value : "", "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+			String value = data.get(key);
+			dataStr += "&" + URLEncoder.encode(key, StandardCharsets.UTF_8) + "=" + URLEncoder.encode(null != value ? value : "", StandardCharsets.UTF_8);
 		}
 		return dataStr;
 	}
