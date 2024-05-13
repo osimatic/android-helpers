@@ -31,7 +31,7 @@ public class HTTPRequest {
 	private static final String TAG = Config.START_TAG+"HTTPRequest";
 
 	/**
-	 * usage : HTTPRequest.allowMySSL(getResources().openRawResource(R.raw.isrgrootx1));
+	 * usage : HTTPRequest.allowMySSL(getResources().openRawResource(R.raw.xxx));
 	 * @param caInput ca file
 	 */
 	public static void addTrustedCa(InputStream caInput)
