@@ -6,30 +6,74 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
 public class HTTPRequest {
 	private static final String TAG = Config.START_TAG+"HTTPRequest";
 
+	/**
+	 * usage : HTTPRequest.allowMySSL(getResources().openRawResource(R.raw.isrgrootx1));
+	 * @param caInput ca file
+	 */
+	public static void addTrustedCa(InputStream caInput)
+	{
+		try {
+			CertificateFactory cf = CertificateFactory.getInstance("X.509");
+
+			Certificate ca;
+			try (caInput) {
+				ca = cf.generateCertificate(caInput);
+			}
+			// Create a KeyStore containing our trusted CAs
+			String keyStoreType = KeyStore.getDefaultType();
+			KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+			keyStore.load(null, null);
+			keyStore.setCertificateEntry("ca", ca);
+			// Create a TrustManager that trusts the CAs in our KeyStore
+			String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+			TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+			tmf.init(keyStore);
+			// Create an SSLContext that uses our TrustManager
+			SSLContext context = SSLContext.getInstance("TLS");
+			context.init(null, tmf.getTrustManagers(), null);
+			HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+		}
+		catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException | IOException | CertificateException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static HTTPResponse get(String url) {
-		HashMap<String, String> data = new HashMap<String, String>();
+		HashMap<String, String> data = new HashMap<>();
 		return HTTPRequest.get(url, data);
 	}
 
 	public static HTTPResponse get(String url, HashMap<String, String> data) {
-		HashMap<String, String> headers = new HashMap<String, String>();
+		HashMap<String, String> headers = new HashMap<>();
 		return HTTPRequest.get(url, data, headers);
 	}
 
 	public static HTTPResponse get(String url, HashMap<String, String> data, HashMap<String, String> headers) {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		int status = 0;
 		BufferedReader reader = null;
 
@@ -50,7 +94,7 @@ public class HTTPRequest {
 			status = conn.getResponseCode();
 
 			// lecture de la réponse
-			InputStream is = null;
+			InputStream is;
 			if (status >= HttpURLConnection.HTTP_BAD_REQUEST) {
 				is = conn.getErrorStream();
 			}
@@ -64,7 +108,7 @@ public class HTTPRequest {
 
 			String inputLine;
 			while ((inputLine = reader.readLine()) != null) {
-				result += inputLine;
+				result.append(inputLine);
 			}
 		}
 		catch (Exception e) {
@@ -76,17 +120,17 @@ public class HTTPRequest {
 					reader.close();
 				}
 			}
-			catch(Exception e){
-				Log.d(TAG, e.getMessage());
+			catch(Exception e) {
+				Log.e(TAG, null != e.getMessage() ? e.getMessage() : "");
 			}
 		}
 
 		Log.d(TAG, "HTTP Status : " + status + " ; JSON : " + result);
-		return new HTTPResponse(status, result);
+		return new HTTPResponse(status, result.toString());
 	}
 
 	public static HTTPResponse post(String url, HashMap<String, String> data) {
-		HashMap<String, String> headers = new HashMap<String, String>();
+		HashMap<String, String> headers = new HashMap<>();
 		return HTTPRequest.post(url, data, headers, false);
 	}
 
@@ -95,7 +139,7 @@ public class HTTPRequest {
 	}
 
 	public static HTTPResponse post(String url, HashMap<String, String> data, HashMap<String, String> headers, boolean dataAsJson) {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		int status = 0;
 		//OutputStreamWriter writer = null;
 		BufferedWriter writer = null;
@@ -103,7 +147,7 @@ public class HTTPRequest {
 
 		try {
 			// encodage des paramètres de la requête
-			String strData = "";
+			String strData;
 			if (dataAsJson) {
 				JSONObject jsonObject = new JSONObject(data);
 				strData = jsonObject.toString();
@@ -136,7 +180,7 @@ public class HTTPRequest {
 			status = conn.getResponseCode();
 
 			//lecture de la réponse
-			InputStream is = null;
+			InputStream is;
 			if (status >= HttpURLConnection.HTTP_BAD_REQUEST) {
 				is = conn.getErrorStream();
 			}
@@ -146,7 +190,7 @@ public class HTTPRequest {
 			reader = new BufferedReader(new InputStreamReader(is));
 			String ligne;
 			while ((ligne = reader.readLine()) != null) {
-				result += ligne;
+				result.append(ligne);
 			}
 		}
 		catch (Exception e) {
@@ -158,21 +202,21 @@ public class HTTPRequest {
 					writer.close();
 				}
 			}
-			catch(Exception e){
-				Log.d(TAG, e.getMessage());
+			catch(Exception e) {
+				Log.e(TAG, null != e.getMessage() ? e.getMessage() : "");
 			}
 			try{
 				if (reader != null) {
 					reader.close();
 				}
 			}
-			catch(Exception e){
-				Log.d(TAG, e.getMessage());
+			catch(Exception e) {
+				Log.e(TAG, null != e.getMessage() ? e.getMessage() : "");
 			}
 		}
 
 		Log.d(TAG, "HTTP Status : " + status + " ; JSON : " + result);
-		return new HTTPResponse(status, result);
+		return new HTTPResponse(status, result.toString());
 	}
 
 	public static void setHttpHeaders(HttpURLConnection conn, HashMap<String, String> headers) {
