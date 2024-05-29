@@ -5,16 +5,18 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.provider.Settings;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class Device {
-	public static String getDeviceUniqueID(Context context) {
-		/*
-		if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+	public static UUID getDeviceUniqueID(Context context) {
+		/*if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
 			return null;
 		}
 
@@ -24,18 +26,13 @@ public class Device {
 		tmSerial = "" + tm.getSimSerialNumber();
 		androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
 
-		UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
-		return deviceUuid.toString();
-		*/
-		return Device.getDeviceSerialID();
+		return new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());*/
+
+		return UUID.nameUUIDFromBytes(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID).getBytes(StandardCharsets.UTF_8));
 	}
 
 	public static String getDeviceName() {
 		return Build.MANUFACTURER + " " + Build.MODEL;
-	}
-
-	public static String getDeviceSerialID() {
-		return Build.SERIAL;
 	}
 
 	public static String getOsName() {
