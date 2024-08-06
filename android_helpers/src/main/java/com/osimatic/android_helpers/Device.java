@@ -28,6 +28,9 @@ public class Device {
 
 		return new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());*/
 
+		//String m_szDevIDShort = "35" + (Build.BOARD.length() % 10) + (Build.BRAND.length() % 10) + (Build.CPU_ABI.length() % 10) + (Build.DEVICE.length() % 10) + (Build.MANUFACTURER.length() % 10) + (Build.MODEL.length() % 10) + (Build.PRODUCT.length() % 10);
+		//return new UUID(m_szDevIDShort.hashCode(), Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID).hashCode());
+
 		return UUID.nameUUIDFromBytes(Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID).getBytes(StandardCharsets.UTF_8));
 	}
 
