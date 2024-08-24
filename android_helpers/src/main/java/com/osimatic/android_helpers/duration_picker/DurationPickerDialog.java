@@ -41,17 +41,7 @@ public class DurationPickerDialog extends AlertDialog implements DialogInterface
 	 * @param duration the initial duration to be shown in the dialog
 	 */
 	public DurationPickerDialog(Context context, OnDurationSetListener listener, long duration) {
-		this(context, listener, duration, androidx.appcompat.R.style.Base_Theme_AppCompat_Dialog);
-	}
-
-	/**
-	 * Creates a time duration picker dialog.
-	 * @param context the context for the dialog
-	 * @param listener the listener to be informed about entered duration
-	 * @param duration the initial duration to be shown in the dialog
-	 */
-	public DurationPickerDialog(Context context, OnDurationSetListener listener, long duration, int themeId) {
-		super(context, themeId);
+		super(context);
 		durationSetListener = listener;
 
 		final LayoutInflater inflater = LayoutInflater.from(context);
@@ -71,8 +61,8 @@ public class DurationPickerDialog extends AlertDialog implements DialogInterface
 	 * @param duration the initial duration to be shown in the dialog
 	 * @param timeUnits the units of time to display
 	 */
-	public DurationPickerDialog(Context context, OnDurationSetListener listener, long duration, int themeId, int timeUnits) {
-		this(context, listener, duration, themeId);
+	public DurationPickerDialog(Context context, OnDurationSetListener listener, long duration, int timeUnits) {
+		this(context, listener, duration);
 		durationInputView.setTimeUnits(timeUnits);
 	}
 
