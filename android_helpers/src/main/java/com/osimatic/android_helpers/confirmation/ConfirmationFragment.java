@@ -4,18 +4,31 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
 import com.osimatic.android_helpers.R;
-import com.osimatic.android_helpers.listener.SubmitListener;
 
 public class ConfirmationFragment extends DialogFragment {
+	public interface SubmitListener {
+		default void onSubmit() {
+
+		}
+		default void onSubmit(String message) {
+
+		}
+	}
+
+	boolean withMessageField = false;
 	SubmitListener submitListener;
 	String title;
 	String confirmationMessage;
+	String enteredMessageLabel;
+	EditText enteredMessageEditText;
 	String buttonText;
 	int buttonTextColor = 0;
 
@@ -25,6 +38,12 @@ public class ConfirmationFragment extends DialogFragment {
 
 	public ConfirmationFragment() {
 		super();
+	}
+
+	public ConfirmationFragment(boolean withMessageField) {
+		super();
+
+		this.withMessageField = withMessageField;
 	}
 
 	@Override
@@ -37,14 +56,21 @@ public class ConfirmationFragment extends DialogFragment {
 		getDialog().setTitle(title);
 		View v = inflater.inflate(R.layout.confirmation_fragment, container, false);
 
+		View enteredMessageLayout = v.findViewById(R.id.entered_message_layout);
+		enteredMessageLayout.setVisibility(withMessageField ? View.VISIBLE : View.GONE);
+		enteredMessageEditText = v.findViewById(R.id.entered_message_edit_text);
+		if (withMessageField && null != enteredMessageLabel) {
+			((TextView) v.findViewById(R.id.entered_message_label)).setText(enteredMessageLabel);
+		}
+
 		((TextView) v.findViewById(R.id.confirmation_message)).setText(confirmationMessage);
 
 		if (null != buttonText) {
-			((TextView) v.findViewById(R.id.submit_button)).setText(buttonText);
+			((Button) v.findViewById(R.id.submit_button)).setText(buttonText);
 		}
 		if (0 != buttonTextColor) {
-			((TextView) v.findViewById(R.id.cancel_button)).setTextColor(buttonTextColor);
-			((TextView) v.findViewById(R.id.submit_button)).setTextColor(buttonTextColor);
+			((Button) v.findViewById(R.id.cancel_button)).setTextColor(buttonTextColor);
+			((Button) v.findViewById(R.id.submit_button)).setTextColor(buttonTextColor);
 		}
 
 		v.findViewById(R.id.cancel_button).setOnClickListener(new View.OnClickListener() {
@@ -59,7 +85,8 @@ public class ConfirmationFragment extends DialogFragment {
 			public void onClick(View v) {
 				new Thread(new Runnable() {
 					public void run() {
-						submitListener.onSubmit();
+						String message = enteredMessageEditText.getText().toString().trim();
+						submitListener.onSubmit(message);
 
 						if (null != successMessage && null != getActivity()) {
 							getActivity().runOnUiThread(new Runnable() {
@@ -90,11 +117,11 @@ public class ConfirmationFragment extends DialogFragment {
 		return v;
 	}
 
-	public SubmitListener getSubmitListener() {
+	public ConfirmationFragment.SubmitListener getSubmitListener() {
 		return submitListener;
 	}
 
-	public void setSubmitListener(SubmitListener submitListener) {
+	public void setSubmitListener(ConfirmationFragment.SubmitListener submitListener) {
 		this.submitListener = submitListener;
 	}
 
@@ -112,6 +139,14 @@ public class ConfirmationFragment extends DialogFragment {
 
 	public void setConfirmationMessage(String confirmationMessage) {
 		this.confirmationMessage = confirmationMessage;
+	}
+
+	public String getEnteredMessageLabel() {
+		return enteredMessageLabel;
+	}
+
+	public void setEnteredMessageLabel(String enteredMessageLabel) {
+		this.enteredMessageLabel = enteredMessageLabel;
 	}
 
 	public String getButtonText() {
@@ -142,5 +177,5 @@ public class ConfirmationFragment extends DialogFragment {
 		this.dismissDialogFragmentAfterSubmit = true;
 		this.dialogFragment = dialogFragment;
 	}
-
 }
+
