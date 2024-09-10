@@ -16,7 +16,7 @@ public class PostalAddress {
 			Geocoder geocoder = new Geocoder(context, locale);
 			List<Address> fromLocation = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
-			if (null == fromLocation) {
+			if (null == fromLocation || fromLocation.isEmpty()) {
 				return null;
 			}
 
