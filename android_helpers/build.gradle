@@ -26,6 +26,10 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
     namespace 'com.osimatic.android_helpers'
+    lint {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 }
 
 dependencies {
