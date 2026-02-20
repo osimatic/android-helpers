@@ -77,6 +77,40 @@ public class DateTime {
 		return make(year, month, DateTime.getNumberOfDaysOfMonth(year, month));
 	}
 
+	/**
+	 * Returns a {@link Calendar} set to midnight (00:00:00.000) of the current local date,
+	 * expressed in the given timezone.
+	 * <p>
+	 * The local date (year, month, day) is read from the device's default timezone so that the
+	 * returned instant always corresponds to <em>today as the user perceives it</em>, regardless of
+	 * the target timezone. This avoids the common off-by-one-day issue that occurs in the first
+	 * hours of the day when UTC is behind the local timezone (e.g. 00:30 UTC+1 → still yesterday
+	 * in UTC).
+	 *
+	 * @param targetTimeZone the timezone in which the resulting Calendar is expressed; must not be null.
+	 * @return a new Calendar at midnight (00:00:00.000) of today's local date in {@code targetTimeZone}.
+	 */
+	public static Calendar getTodayAtMidnight(TimeZone targetTimeZone) {
+		Calendar localNow = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance(targetTimeZone, Locale.getDefault());
+		cal.set(localNow.get(Calendar.YEAR), localNow.get(Calendar.MONTH), localNow.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal;
+	}
+
+	/**
+	 * Convenience method returning a {@link Calendar} at midnight (00:00:00.000 UTC) of the current
+	 * local date.
+	 * <p>
+	 * Equivalent to {@code getTodayAtMidnight(TimeZone.getTimeZone("UTC"))}.
+	 *
+	 * @return a new Calendar at midnight (00:00:00.000 UTC) of today's local date.
+	 * @see #getTodayAtMidnight(TimeZone)
+	 */
+	public static Calendar getTodayAtMidnightUtc() {
+		return getTodayAtMidnight(TimeZone.getTimeZone("UTC"));
+	}
+
 
 	// ------------------------------------------------------------
 	// Fonction depuis jour/mois/année
