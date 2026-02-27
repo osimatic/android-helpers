@@ -80,13 +80,11 @@ public class DateTime {
 	/**
 	 * Returns a {@link Calendar} set to midnight (00:00:00.000) of the current local date,
 	 * expressed in the given timezone.
-	 * <p>
 	 * The local date (year, month, day) is read from the device's default timezone so that the
-	 * returned instant always corresponds to <em>today as the user perceives it</em>, regardless of
+	 * returned instant always corresponds to "today as the user perceives it", regardless of
 	 * the target timezone. This avoids the common off-by-one-day issue that occurs in the first
 	 * hours of the day when UTC is behind the local timezone (e.g. 00:30 UTC+1 → still yesterday
 	 * in UTC).
-	 *
 	 * @param targetTimeZone the timezone in which the resulting Calendar is expressed; must not be null.
 	 * @return a new Calendar at midnight (00:00:00.000) of today's local date in {@code targetTimeZone}.
 	 */
@@ -101,9 +99,7 @@ public class DateTime {
 	/**
 	 * Convenience method returning a {@link Calendar} at midnight (00:00:00.000 UTC) of the current
 	 * local date.
-	 * <p>
 	 * Equivalent to {@code getTodayAtMidnight(TimeZone.getTimeZone("UTC"))}.
-	 *
 	 * @return a new Calendar at midnight (00:00:00.000 UTC) of today's local date.
 	 * @see #getTodayAtMidnight(TimeZone)
 	 */

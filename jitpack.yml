@@ -1,0 +1,6 @@
+jdk:
+  - openjdk17
+before_install:
+  - chmod +x gradlew
+install:
+  - ./gradlew android_helpers:assembleRelease android_helpers:publishToMavenLocal
