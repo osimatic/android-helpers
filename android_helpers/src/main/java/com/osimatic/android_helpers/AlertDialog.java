@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.util.Log;
 
 public class AlertDialog {
-	private static final String TAG = Config.START_TAG+"AlertDialog";
+	private static final String TAG = Config.START_TAG + "AlertDialog";
 
 	public static void showAlert(final Activity activity, final String message) {
 		showAlert(activity, message, null);

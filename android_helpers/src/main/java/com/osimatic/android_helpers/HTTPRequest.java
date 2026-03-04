@@ -28,7 +28,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 
 public class HTTPRequest {
-	private static final String TAG = Config.START_TAG+"HTTPRequest";
+	private static final String TAG = Config.START_TAG + "HTTPRequest";
 
 	/**
 	 * usage : HTTPRequest.allowMySSL(getResources().openRawResource(R.raw.xxx));

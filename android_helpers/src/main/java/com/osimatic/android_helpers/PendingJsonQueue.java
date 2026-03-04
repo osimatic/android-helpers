@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class PendingJsonQueue {
 
-	private static final String TAG = "PendingJsonQueue";
+	private static final String TAG = Config.START_TAG + "PendingJsonQueue";
 	private static final String KEY_QUEUE = "queue";
 
 	private final Context context;

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 public class ProgressDialog {
-	private static final String TAG = Config.START_TAG+"ProgressDialog";
+	private static final String TAG = Config.START_TAG + "ProgressDialog";
 
 	public static android.app.ProgressDialog getProgressDialog(final Activity activity) {
 		if (null == activity) {
