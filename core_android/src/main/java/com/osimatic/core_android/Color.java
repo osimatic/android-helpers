@@ -29,6 +29,36 @@ public class Color {
 	public static final int DECLINED_EVENT_TEXT_ALPHA = 0xC0;
 
 	// =============================================================================================
+	// Color parsing
+	// =============================================================================================
+
+	/**
+	 * Parses a color string and returns the corresponding ARGB integer, or {@code defaultColor} if the string is null or invalid.
+	 *
+	 * <pre>
+	 * parseOrDefault("#FF0000", Color.GRAY)  = 0xFFFF0000
+	 * parseOrDefault("red",     Color.GRAY)  = 0xFFFF0000
+	 * parseOrDefault("nope",    Color.GRAY)  = Color.GRAY
+	 * parseOrDefault(null,      Color.GRAY)  = Color.GRAY
+	 * </pre>
+	 *
+	 * @param color        the color string to parse (e.g. {@code "#FF0000"}, {@code "red"}); may be null
+	 * @param defaultColor the color to return if {@code color} is null or cannot be parsed
+	 * @return the parsed ARGB color, or {@code defaultColor} on failure
+	 * @see android.graphics.Color#parseColor(String)
+	 */
+	public static int parseOrDefault(String color, int defaultColor) {
+		if (color == null) {
+			return defaultColor;
+		}
+		try {
+			return android.graphics.Color.parseColor(color);
+		} catch (IllegalArgumentException e) {
+			return defaultColor;
+		}
+	}
+
+	// =============================================================================================
 	// Color conversion / formatting
 	// =============================================================================================
 
