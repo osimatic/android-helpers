@@ -3,7 +3,10 @@ package com.osimatic.core_android;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.ToneGenerator;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.os.VibratorManager;
@@ -27,6 +30,29 @@ public class Audio {
 	private Audio() {}
 
 	// =============================================================================================
+	// Enums
+	// =============================================================================================
+
+	/**
+	 * Controls whether the device vibrates when a sound, beep, or tone is played.
+	 *
+	 * @see #playSound(Context, int, VibrateOption)
+	 * @see #playSound(Context, String, VibrateOption)
+	 * @see #playBeep(Context, VibrateOption)
+	 * @see #playAck(Context, VibrateOption)
+	 */
+	public enum VibrateOption {
+		/** Never vibrate. */
+		NEVER,
+		/** Vibrate only if the ringer is in vibrate mode ({@link AudioManager#RINGER_MODE_VIBRATE}). */
+		IF_VIBRATE_MODE,
+		/** Always vibrate, regardless of the ringer mode. */
+		ALWAYS,
+		/** Vibrate if the ringer is in normal or vibrate mode; do nothing in silent mode. */
+		IF_NOT_SILENT
+	}
+
+	// =============================================================================================
 	// Ringer mode
 	// =============================================================================================
 
@@ -38,8 +64,7 @@ public class Audio {
 	 * @see AudioManager#getRingerMode()
 	 */
 	public static boolean isSilent(Context context) {
-		AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		return am != null && am.getRingerMode() == AudioManager.RINGER_MODE_SILENT;
+		return getRingerMode(context) == AudioManager.RINGER_MODE_SILENT;
 	}
 
 	/**
@@ -50,8 +75,30 @@ public class Audio {
 	 * @see AudioManager#getRingerMode()
 	 */
 	public static boolean isVibrateMode(Context context) {
+		return getRingerMode(context) == AudioManager.RINGER_MODE_VIBRATE;
+	}
+
+	/**
+	 * Returns {@code true} if the device ringer mode is currently set to normal.
+	 *
+	 * @param context the application context; must not be {@code null}
+	 * @return {@code true} if ringer mode is {@link AudioManager#RINGER_MODE_NORMAL}
+	 * @see AudioManager#getRingerMode()
+	 */
+	public static boolean isRingerMode(Context context) {
+		return getRingerMode(context) == AudioManager.RINGER_MODE_NORMAL;
+	}
+
+	/**
+	 * Returns the current ringer mode of the device.
+	 *
+	 * @param context the application context; must not be {@code null}
+	 * @return one of {@link AudioManager#RINGER_MODE_NORMAL}, {@link AudioManager#RINGER_MODE_VIBRATE}, or {@link AudioManager#RINGER_MODE_SILENT}
+	 * @see AudioManager#getRingerMode()
+	 */
+	public static int getRingerMode(Context context) {
 		AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		return am != null && am.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE;
+		return am != null ? am.getRingerMode() : AudioManager.RINGER_MODE_SILENT;
 	}
 
 	// =============================================================================================
@@ -90,62 +137,66 @@ public class Audio {
 	// =============================================================================================
 
 	/**
-	 * Plays the given sound resource, respecting the current ringer mode.
+	 * Plays the given sound resource, respecting the current ringer mode, without vibration.
 	 *
 	 * <p>The sound is played only if the ringer mode is {@link AudioManager#RINGER_MODE_NORMAL}. The {@link MediaPlayer} is automatically released once playback completes.
 	 *
 	 * @param context the application context; must not be {@code null}
 	 * @param resId   the raw resource ID of the sound to play
-	 * @see #playSound(Context, int, boolean)
+	 * @see #playSound(Context, int, VibrateOption)
 	 */
 	public static void playSound(Context context, int resId) {
-		playSound(context, resId, false);
+		playSound(context, resId, VibrateOption.NEVER);
 	}
 
 	/**
-	 * Plays the given sound resource or vibrates, respecting the current ringer mode.
+	 * Plays the given sound resource, respecting the current ringer mode, with optional vibration.
 	 *
-	 * <p>Behavior by ringer mode:
-	 * <ul>
-	 *   <li>{@link AudioManager#RINGER_MODE_SILENT}: does nothing</li>
-	 *   <li>{@link AudioManager#RINGER_MODE_VIBRATE}: vibrates for 400 ms if {@code vibrateIfVibrateMode} is {@code true}</li>
-	 *   <li>{@link AudioManager#RINGER_MODE_NORMAL}: plays the sound; the {@link MediaPlayer} is released after completion</li>
-	 * </ul>
+	 * <p>The sound is played only if the ringer mode is {@link AudioManager#RINGER_MODE_NORMAL}. Vibration is triggered independently based on {@code vibrateOption}: {@link VibrateOption#ALWAYS} vibrates unconditionally, {@link VibrateOption#IF_VIBRATE_MODE} vibrates only when the ringer is in vibrate mode.
 	 *
-	 * @param context              the application context; must not be {@code null}
-	 * @param resId                the raw resource ID of the sound to play
-	 * @param vibrateIfVibrateMode if {@code true}, vibrates when the ringer is in vibrate mode
+	 * @param context       the application context; must not be {@code null}
+	 * @param resId         the raw resource ID of the sound to play
+	 * @param vibrateOption controls when the device vibrates alongside the sound
+	 * @see VibrateOption
 	 * @see #playSound(Context, int)
 	 * @see #vibrate(Context, long)
 	 */
-	public static void playSound(Context context, int resId, boolean vibrateIfVibrateMode) {
-		AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		if (am == null) return;
-		switch (am.getRingerMode()) {
-			case AudioManager.RINGER_MODE_SILENT:
-				break;
-			case AudioManager.RINGER_MODE_VIBRATE:
-				if (vibrateIfVibrateMode) {
-					vibrate(context, 400);
-				}
-				break;
-			case AudioManager.RINGER_MODE_NORMAL:
-				MediaPlayer mp = MediaPlayer.create(context, resId);
-				if (mp == null) return;
-				mp.setOnCompletionListener(MediaPlayer::release);
-				mp.start();
-				break;
+	public static void playSound(Context context, int resId, VibrateOption vibrateOption) {
+		if (isRingerMode(context)) {
+			MediaPlayer mp = MediaPlayer.create(context, resId);
+			if (mp == null) {
+				return;
+			}
+			mp.setOnCompletionListener(MediaPlayer::release);
+			mp.start();
 		}
+
+		vibrateIfNeeded(context, vibrateOption);
 	}
 
 	/**
-	 * Plays the audio file at the given path.
+	 * Plays the audio file at the given path, without vibration.
 	 *
-	 * <p>The {@link MediaPlayer} is automatically released once playback completes. If an error occurs during preparation, the player is released immediately and playback does not start.
-	 *
+	 * @param context  the application context; must not be {@code null}
 	 * @param filePath the absolute path to the audio file to play; must not be {@code null}
+	 * @see #playSound(Context, String, VibrateOption)
 	 */
-	public static void playSound(String filePath) {
+	public static void playSound(Context context, String filePath) {
+		playSound(context, filePath, VibrateOption.NEVER);
+	}
+
+	/**
+	 * Plays the audio file at the given path, with optional vibration.
+	 *
+	 * <p>The {@link MediaPlayer} is automatically released once playback completes. If an error occurs during preparation, the player is released immediately and playback does not start. Vibration is triggered independently based on {@code vibrateOption}.
+	 *
+	 * @param context       the application context; must not be {@code null}
+	 * @param filePath      the absolute path to the audio file to play; must not be {@code null}
+	 * @param vibrateOption controls when the device vibrates alongside the sound
+	 * @see VibrateOption
+	 * @see #playSound(Context, String)
+	 */
+	public static void playSound(Context context, String filePath, VibrateOption vibrateOption) {
 		MediaPlayer mp = new MediaPlayer();
 		try {
 			mp.setDataSource(filePath);
@@ -157,11 +208,108 @@ public class Audio {
 		}
 		mp.setOnCompletionListener(MediaPlayer::release);
 		mp.start();
+
+		vibrateIfNeeded(context, vibrateOption);
+	}
+
+	// =============================================================================================
+	// Beep
+	// =============================================================================================
+
+	/**
+	 * Plays a short notification beep using {@link ToneGenerator}, without vibration.
+	 *
+	 * @param context the application context; must not be {@code null}
+	 * @see #playBeep(Context, VibrateOption)
+	 * @see ToneGenerator#TONE_PROP_BEEP
+	 * @see <a href="https://developer.android.com/reference/android/media/ToneGenerator">ToneGenerator — Android Docs</a>
+	 */
+	public static void playBeep(Context context) {
+		playBeep(context, VibrateOption.NEVER);
+	}
+
+	/**
+	 * Plays a short notification beep using {@link ToneGenerator}, with optional vibration.
+	 *
+	 * @param context       the application context; must not be {@code null}
+	 * @param vibrateOption controls when the device vibrates alongside the tone
+	 * @see VibrateOption
+	 * @see ToneGenerator#TONE_PROP_BEEP
+	 * @see <a href="https://developer.android.com/reference/android/media/ToneGenerator">ToneGenerator — Android Docs</a>
+	 */
+	public static void playBeep(Context context, VibrateOption vibrateOption) {
+		playTone(context, ToneGenerator.TONE_PROP_BEEP, vibrateOption);
+	}
+
+	/**
+	 * Plays a short acknowledgement tone using {@link ToneGenerator}, without vibration.
+	 *
+	 * @param context the application context; must not be {@code null}
+	 * @see #playAck(Context, VibrateOption)
+	 * @see ToneGenerator#TONE_PROP_ACK
+	 * @see <a href="https://developer.android.com/reference/android/media/ToneGenerator">ToneGenerator — Android Docs</a>
+	 */
+	public static void playAck(Context context) {
+		playAck(context, VibrateOption.NEVER);
+	}
+
+	/**
+	 * Plays a short acknowledgement tone using {@link ToneGenerator}, with optional vibration.
+	 *
+	 * @param context       the application context; must not be {@code null}
+	 * @param vibrateOption controls when the device vibrates alongside the tone
+	 * @see VibrateOption
+	 * @see ToneGenerator#TONE_PROP_ACK
+	 * @see <a href="https://developer.android.com/reference/android/media/ToneGenerator">ToneGenerator — Android Docs</a>
+	 */
+	public static void playAck(Context context, VibrateOption vibrateOption) {
+		playTone(context, ToneGenerator.TONE_PROP_ACK, vibrateOption);
+	}
+
+	/**
+	 * Plays a tone on {@link AudioManager#STREAM_NOTIFICATION} at maximum volume for 150 ms, releases the {@link ToneGenerator} after 300 ms, and optionally vibrates according to {@code vibrateOption}.
+	 *
+	 * <p>Does nothing if the ringer is in silent mode ({@link AudioManager#RINGER_MODE_SILENT}).
+	 *
+	 * @param context       the application context; must not be {@code null}
+	 * @param toneType      the tone type (e.g. {@link ToneGenerator#TONE_PROP_BEEP})
+	 * @param vibrateOption controls when the device vibrates alongside the tone
+	 */
+	private static void playTone(Context context, int toneType, VibrateOption vibrateOption) {
+		if (isSilent(context)) {
+			return;
+		}
+
+		if (isRingerMode(context)) {
+			try {
+				ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, ToneGenerator.MAX_VOLUME);
+				toneGenerator.startTone(toneType, 150);
+				new Handler(Looper.getMainLooper()).postDelayed(toneGenerator::release, 300);
+			} catch (Exception e) {
+				Log.e(TAG, "playTone exception: " + e.getMessage());
+			}
+		}
+		
+		vibrateIfNeeded(context, vibrateOption);
 	}
 
 	// =============================================================================================
 	// Vibration
 	// =============================================================================================
+
+	/**
+	 * Vibrates for 150 ms if {@code vibrateOption} conditions are met for the current ringer mode.
+	 *
+	 * @param context       the application context; must not be {@code null}
+	 * @param vibrateOption the vibration option to evaluate
+	 */
+	private static void vibrateIfNeeded(Context context, VibrateOption vibrateOption) {
+		if (vibrateOption == VibrateOption.ALWAYS
+				|| (vibrateOption == VibrateOption.IF_VIBRATE_MODE && isVibrateMode(context))
+				|| (vibrateOption == VibrateOption.IF_NOT_SILENT && !isSilent(context))) {
+			vibrate(context, 150);
+		}
+	}
 
 	/**
 	 * Vibrates the device for the given duration in milliseconds.
