@@ -15,6 +15,5 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = "Android Helpers"
-include ':app'
-include ':android_helpers'
+rootProject.name = "Core Android"
+include ':core_android'

@@ -10,11 +10,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/android_helpers" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/core_android" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>
