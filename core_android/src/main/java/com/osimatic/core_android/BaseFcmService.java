@@ -63,6 +63,14 @@ public abstract class BaseFcmService extends FirebaseMessagingService {
 	protected abstract void registerTokenOnServer(String token);
 
 	/**
+	 * Removes the FCM token from the backend server.
+	 * Called automatically when {@link #deleteToken()} succeeds.
+	 *
+	 * @param token the FCM registration token that was deleted
+	 */
+	protected abstract void unregisterTokenFromServer(String token);
+
+	/**
 	 * Builds the {@link Intent} to open when the user taps the notification.
 	 *
 	 * @param categType value of {@code categ_type} from the data payload, may be null
@@ -142,14 +150,20 @@ public abstract class BaseFcmService extends FirebaseMessagingService {
 	/**
 	 * Deletes the FCM token. The device will no longer receive FCM messages
 	 * until a new token is generated and registered.
+	 * On success, calls {@link #unregisterTokenFromServer(String)} with the deleted token.
 	 * Call this on logout.
 	 *
 	 * @see <a href="https://firebase.google.com/docs/reference/android/com/google/firebase/messaging/FirebaseMessaging#deleteToken()">FirebaseMessaging.deleteToken()</a>
 	 */
-	public static void deleteToken() {
-		FirebaseMessaging.getInstance().deleteToken()
-				.addOnSuccessListener(unused -> Log.d(TAG, "FCM token deleted"))
-				.addOnFailureListener(e -> Log.e(TAG, "Failed to delete FCM token: " + e.getMessage()));
+	public void deleteToken() {
+		FirebaseMessaging.getInstance().getToken()
+				.addOnSuccessListener(token -> FirebaseMessaging.getInstance().deleteToken()
+						.addOnSuccessListener(unused -> {
+							Log.d(TAG, "FCM token deleted");
+							new Thread(() -> unregisterTokenFromServer(token)).start();
+						})
+						.addOnFailureListener(e -> Log.e(TAG, "Failed to delete FCM token: " + e.getMessage())))
+				.addOnFailureListener(e -> Log.e(TAG, "Failed to retrieve FCM token before deletion: " + e.getMessage()));
 	}
 
 	// -------------------------------------------------------------------------
