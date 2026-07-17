@@ -192,23 +192,27 @@ public class DateTime {
 	}
 
 	/**
-	 * Formats the given calendar as an SQL date string ({@code yyyy-MM-dd}).
+	 * Formats the given calendar as an SQL date string ({@code yyyy-MM-dd}), using the calendar's own time zone.
+	 *
+	 * <p>Unlike {@code new java.sql.Date(calendar.getTimeInMillis()).toString()}, this does not depend on the JVM/device default time zone: the calendar's own {@link TimeZone} (as set by {@link Calendar#setTimeZone}) is what determines the resulting day.
 	 *
 	 * @param calendar the calendar to format; must not be {@code null}
 	 * @return an SQL date string (e.g. {@code "2024-01-31"})
 	 */
 	public static String getSqlDate(Calendar calendar) {
-		return (new java.sql.Date(calendar.getTimeInMillis())).toString();
+		return Timestamp.getSqlDate(calendar.getTimeInMillis(), calendar.getTimeZone().getID());
 	}
 
 	/**
-	 * Formats the given calendar as an SQL time string ({@code HH:mm:ss}).
+	 * Formats the given calendar as an SQL time string ({@code HH:mm:ss}), using the calendar's own time zone.
+	 *
+	 * <p>Unlike {@code new java.sql.Time(calendar.getTimeInMillis()).toString()}, this does not depend on the JVM/device default time zone: the calendar's own {@link TimeZone} (as set by {@link Calendar#setTimeZone}) is what determines the resulting time.
 	 *
 	 * @param calendar the calendar to format; must not be {@code null}
 	 * @return an SQL time string (e.g. {@code "14:30:00"})
 	 */
 	public static String getSqlTime(Calendar calendar) {
-		return (new java.sql.Time(calendar.getTimeInMillis())).toString();
+		return Timestamp.getSqlTime(calendar.getTimeInMillis(), calendar.getTimeZone().getID());
 	}
 
 	/**
