@@ -6,16 +6,20 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.Build;
 import android.provider.Settings;
 
 import androidx.annotation.ChecksSdkIntAtLeast;
+import androidx.annotation.NonNull;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -241,6 +245,66 @@ public class Device {
 	@Deprecated
 	public static boolean isDeviceOnline(Context context) {
 		return isOnline(context);
+	}
+
+	/**
+	 * Listener notified when the overall network availability changes.
+	 *
+	 * @see #registerNetworkAvailabilityCallback(Context, NetworkAvailabilityListener)
+	 */
+	public interface NetworkAvailabilityListener {
+		void onNetworkAvailabilityChanged(boolean available);
+	}
+
+	/**
+	 * Registers a callback that notifies {@code listener} whenever the device gains or loses internet access.
+	 *
+	 * <p>Unlike a naive {@link ConnectivityManager.NetworkCallback}, this correctly handles devices with several active networks (e.g. Wi-Fi and cellular at the same time): availability is only reported as lost once every tracked network is gone, not on the first {@code onLost}.
+	 *
+	 * <p>The returned callback must be unregistered with {@link #unregisterNetworkAvailabilityCallback(Context, ConnectivityManager.NetworkCallback)} once no longer needed (e.g. in {@code onCleared()}).
+	 *
+	 * @param context the application context; must not be {@code null}
+	 * @param listener notified with {@code true}/{@code false} on every availability change
+	 * @return the registered {@link ConnectivityManager.NetworkCallback}, to be passed to {@link #unregisterNetworkAvailabilityCallback}
+	 * @see <a href="https://developer.android.com/training/monitoring-device-state/connectivity-status-type">Monitor connectivity status — Android Developers</a>
+	 */
+	public static ConnectivityManager.NetworkCallback registerNetworkAvailabilityCallback(Context context, NetworkAvailabilityListener listener) {
+		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		// Plusieurs réseaux (wifi + data mobile) peuvent être actifs en même temps
+		Set<Network> availableNetworks = Collections.synchronizedSet(new HashSet<>());
+		ConnectivityManager.NetworkCallback callback = new ConnectivityManager.NetworkCallback() {
+			@Override
+			public void onAvailable(@NonNull Network network) {
+				availableNetworks.add(network);
+				listener.onNetworkAvailabilityChanged(true);
+			}
+
+			@Override
+			public void onLost(@NonNull Network network) {
+				availableNetworks.remove(network);
+				listener.onNetworkAvailabilityChanged(!availableNetworks.isEmpty());
+			}
+		};
+		if (cm != null) {
+			NetworkRequest request = new NetworkRequest.Builder()
+					.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+					.build();
+			cm.registerNetworkCallback(request, callback);
+		}
+		return callback;
+	}
+
+	/**
+	 * Unregisters a callback previously registered with {@link #registerNetworkAvailabilityCallback(Context, NetworkAvailabilityListener)}.
+	 *
+	 * @param context the application context; must not be {@code null}
+	 * @param callback the callback returned by {@link #registerNetworkAvailabilityCallback}
+	 */
+	public static void unregisterNetworkAvailabilityCallback(Context context, ConnectivityManager.NetworkCallback callback) {
+		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (cm != null && callback != null) {
+			cm.unregisterNetworkCallback(callback);
+		}
 	}
 
 	// =============================================================================================
